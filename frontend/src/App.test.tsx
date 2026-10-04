@@ -10,7 +10,7 @@ describe('App Component', () => {
   it('renderiza la pantalla de inicio de sesión cuando no hay sesión activa', () => {
     render(<App />);
 
-    expect(screen.getByRole('heading', { name: 'Interrápido Store' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Iniciar sesión' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Inicia sesión' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Ingresar' })).toBeInTheDocument();
   });
 });

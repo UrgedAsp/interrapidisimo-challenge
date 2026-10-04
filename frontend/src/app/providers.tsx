@@ -2,7 +2,7 @@ import React, { type ReactNode } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '../api/queryClient.js';
 import { ToastProvider } from '../components/ui/Toast.js';
-import { AuthProvider } from '../features/auth/context/AuthContext.js';
+import { AuthProvider } from '../features/auth/AuthProvider.js';
 
 export const AppProviders: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (

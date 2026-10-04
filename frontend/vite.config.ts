@@ -15,8 +15,6 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // El prefijo /api se reenvia tal cual al backend: el cliente siempre
-      // pega a rutas relativas, así en dev no hay CORS ni URLs duplicadas.
       '/api': { target: API_ORIGIN, changeOrigin: true },
     },
   },
@@ -24,5 +22,6 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
+    pool: 'forks',
   },
 });

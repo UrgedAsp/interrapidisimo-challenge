@@ -1,17 +1,12 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { setUnauthorizedHandler } from '../../../api/apiClient.js';
-import { getToken, removeToken, setToken } from '../../../lib/tokenStorage.js';
+import { useQueryClient } from '@tanstack/react-query';
+import { setUnauthorizedHandler } from '../../api/apiClient.js';
+import { getToken, removeToken, setToken } from '../../lib/tokenStorage.js';
 
-import type { User } from '../../../types/api.js';
-import { getMeApi, loginApi } from '../api/authApi.js';
-
-interface AuthContextValue {
-  user: User | null;
+export interface AuthContextValue {
   token: string | null;
   isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (token: string) => void;
   logout: () => void;
 }
 
@@ -27,6 +22,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     queryClient.clear();
   }, [queryClient]);
 
+  const login = useCallback(
+    (newToken: string) => {
+      setToken(newToken);
+      setLocalToken(newToken);
+    },
+    [],
+  );
+
   useEffect(() => {
     setUnauthorizedHandler(logout);
     return () => {
@@ -34,25 +37,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, [logout]);
 
-  const { data: user, isLoading } = useQuery<User>({
-    queryKey: ['me'],
-    queryFn: getMeApi,
-    enabled: Boolean(token),
-    staleTime: 30 * 1000,
-  });
-
-  const login = async (email: string, password: string) => {
-    const result = await loginApi(email, password);
-    setToken(result.token);
-    setLocalToken(result.token);
-    queryClient.setQueryData(['me'], result.user);
-  };
-
   const value: AuthContextValue = {
-    user: user ?? null,
     token,
     isAuthenticated: Boolean(token),
-    isLoading: Boolean(token) && isLoading,
     login,
     logout,
   };

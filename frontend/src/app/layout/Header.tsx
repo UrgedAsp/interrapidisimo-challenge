@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, LogOut, Menu, ShoppingBag, Sparkles, Store, X } from 'lucide-react';
-import { formatPoints } from '../../lib/format.js';
+import { Heart, LogOut, Menu, ShoppingBag, Store, X } from 'lucide-react';
+import { PointsBadge } from '../../features/auth/components/PointsBadge.js';
 import { useAuth } from '../../features/auth/hooks/useAuth.js';
+import { useMe } from '../../features/auth/hooks/useMe.js';
 import { useCart } from '../../features/cart/hooks/useCart.js';
 
 interface HeaderProps {
@@ -10,14 +11,14 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const { data: user } = useMe();
   const { cart } = useCart();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
   const itemCount = cart?.itemCount ?? 0;
-  const points = user?.pointsBalance ?? 0;
 
   return (
     <header className="sticky top-0 z-40 bg-neutral/95 backdrop-blur-sm border-b border-tertiary/20">
@@ -62,14 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
           {/* Acciones del Header */}
           <div className="flex items-center gap-3">
             {/* Indicador de Puntos */}
-            <div
-              className="flex items-center gap-1.5 bg-tertiary/15 border border-tertiary/30 text-primary px-3 py-1.5 rounded-full text-sm font-medium shadow-xs"
-              aria-label={`Tienes ${points} puntos de recompensa`}
-            >
-              <Sparkles size={16} className="text-secondary" aria-hidden="true" />
-              <span className="font-semibold text-secondary">{formatPoints(points)}</span>
-              <span className="text-xs text-primary/70 hidden sm:inline">pts</span>
-            </div>
+            <PointsBadge />
 
             {/* Botón Carrito */}
             <button
@@ -90,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             <button
               type="button"
               onClick={logout}
-              title="Cerrar sesión"
+              title={`Cerrar sesión (${user?.name ?? 'Usuario'})`}
               aria-label="Cerrar sesión"
               className="hidden md:flex items-center gap-1 p-2 text-primary/60 hover:text-error rounded-[var(--radius-field)] hover:bg-error/10 transition-colors cursor-pointer focus-visible:outline-error"
             >

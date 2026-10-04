@@ -1,33 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Navigate, Route, Routes, useLocation, Link } from 'react-router-dom';
-import { Spinner } from '../components/ui/Spinner.js';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import { EmptyState } from '../components/ui/EmptyState.js';
 import { Button } from '../components/ui/Button.js';
-import { useAuth } from '../features/auth/hooks/useAuth.js';
+import { ProtectedRoute } from '../features/auth/components/ProtectedRoute.js';
 import { LoginPage } from '../features/auth/pages/LoginPage.js';
 import { CatalogPage } from '../features/catalog/pages/CatalogPage.js';
 import { FavoritesPage } from '../features/favorites/pages/FavoritesPage.js';
 import { AppLayout } from './layout/AppLayout.js';
 
-export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
-  const location = useLocation();
-
-  if (isLoading) {
-    return (
-      <div className="min-h-[50vh] flex flex-col items-center justify-center gap-3">
-        <Spinner size="lg" className="text-secondary" />
-        <p className="text-xs text-primary/60">Cargando sesión...</p>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  return <>{children}</>;
-};
+export { ProtectedRoute };
 
 export const AppRouter: React.FC = () => {
   return (
