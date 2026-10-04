@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #1C1917;
+    --color-secondary: #B4654A;
+    --color-tertiary: #C8A97E;
+    --color-neutral: #F9F6F0;
+    --color-success: #3F6B4F;
+    --color-error: #B42318;
+  }
+
+  html {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background-color: #F9F6F0;
+    color: #1C1917;
+  }
+
+  h1, h2, h3 {
+    font-family: "Playfair Display", serif;
+  }
+
+  * {
+    border-radius: 6px;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
