@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createTestDatabase, countRows } from './testing.js';
-import type { DatabaseConnection } from './database.js';
+import type { DatabaseConnection } from './connection.js';
 
 let db: DatabaseConnection;
 

@@ -1,4 +1,4 @@
-import type { DatabaseConnection } from '../../db/database.js';
+import type { DatabaseConnection } from '../../db/connection.js';
 
 /**
  * Fila de `users` tal como la devuelve SQLite. `snake_case` y sin transformar:

@@ -2,26 +2,13 @@ import Database from 'better-sqlite3';
 import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { normalizeText } from '../shared/text.js';
 
 const DB_DIR = dirname(fileURLToPath(import.meta.url));
 
 const IN_MEMORY = ':memory:';
 
 export type DatabaseConnection = Database.Database;
-
-/**
- * Minúsculas y sin tildes, para comparar texto escrito por personas.
- *
- * "Cafetera", "cafetera" y "CAFETERA" deben encontrar lo mismo, y "Jamón" debe
- * coincidir con una búsqueda de "jamon". NFD separa la tilde de la letra, así que
- * quitarla es una comparación por rango sobre los caracteres ya descompuestos.
- */
-function normalizeText(value: string): string {
-  return value
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .toLowerCase();
-}
 
 /**
  * Registra las funciones que SQL usa y SQLite no trae.
@@ -32,8 +19,10 @@ function normalizeText(value: string): string {
  * resuelve el índice antes de invocar, así que el orden de los predicados deja
  * de importar.
  *
- * `deterministic` permite que SQLite las use en índices y en planes con
- * `LIKE`/`GLOB` sobre columnas.
+ * `deterministic` le dice a SQLite que el resultado depende solo del argumento, y con
+ * eso la función vale en índices y en planes con `LIKE`/`GLOB`. La lógica es la de
+ * `shared/text.ts`, no una copia: si las dos versiones difieren, la búsqueda falla en
+ * silencio.
  */
 function registerFunctions(db: Database.Database): void {
   db.function('normalize_text', { deterministic: true }, normalizeText);

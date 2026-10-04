@@ -3,7 +3,7 @@ import request from 'supertest';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { createApp } from '../../app.js';
 import { env } from '../../config/env.js';
-import type { DatabaseConnection } from '../../db/database.js';
+import type { DatabaseConnection } from '../../db/connection.js';
 import { createSeededDatabase } from '../../db/testing.js';
 import { signToken } from '../../shared/jwt.js';
 import type { ApiErrorBody, ApiSuccess, LoginResult, User } from '../../shared/types.js';

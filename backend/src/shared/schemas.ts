@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 /**
- * Esquemas de entrada que el contrato define a nivel de API (§4), compartidos
- * por los módulos que los usan.
+ * Esquemas de entrada que el contrato define a nivel de API (§4) y que usan más de
+ * un módulo. Los esquemas propios de un endpoint viven junto a él
+ * (`modules/<módulo>/<módulo>.schema.ts`).
  *
  * Los mensajes van explícitos en los parámetros de paginación: son los que ve
  * el usuario final en la UI y los automáticos ("Demasiado grande: se esperaba
@@ -21,11 +22,6 @@ export const paginationQuery = z.object({
     .min(1, 'Debe ser 1 o más')
     .max(50, 'Debe ser 50 o menos')
     .default(12),
-});
-
-export const productsQuery = paginationQuery.extend({
-  category: z.string().trim().min(1, 'Categoría inválida').optional(),
-  q: z.string().trim().max(100, 'Máximo 100 caracteres').optional(),
 });
 
 export const productIdParam = z.strictObject({

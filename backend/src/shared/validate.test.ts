@@ -1,7 +1,7 @@
 import type { Request } from 'express';
 import { describe, expect, it } from 'vitest';
 import { z, ZodError } from 'zod';
-import { addCartItemBody, paginationQuery, productIdParam, productsQuery, updateCartItemBody } from './schemas.js';
+import { addCartItemBody, paginationQuery, productIdParam, updateCartItemBody } from './schemas.js';
 import { parseBody, parseParams, parseQuery, validationDetails } from './validate.js';
 
 /** `req` no se usa: los helpers solo leen `body`, `query` y `params`. */
@@ -51,35 +51,6 @@ describe('paginación (§4.2)', () => {
     expect(parseQuery(paginationQuery, req({ query: { pageSize: '50' } }))).toEqual({
       page: 1,
       pageSize: 50,
-    });
-  });
-});
-
-describe('filtro de catálogo (§4.2)', () => {
-  it('acepta categoría y búsqueda', () => {
-    expect(
-      parseQuery(productsQuery, req({ query: { category: 'tecnologia', q: '  audífonos  ' } })),
-    ).toEqual({ page: 1, pageSize: 12, category: 'tecnologia', q: 'audífonos' });
-  });
-
-  it('recorta la búsqueda', () => {
-    expect(parseQuery(productsQuery, req({ query: { q: '   ' } })).q).toBe('');
-  });
-
-  it('rechaza una búsqueda de más de 100 caracteres', () => {
-    expect(issuesOf(() => parseQuery(productsQuery, req({ query: { q: 'x'.repeat(101) } })))).toEqual([
-      'q: Máximo 100 caracteres',
-    ]);
-  });
-
-  it('acepta exactamente 100 caracteres', () => {
-    expect(parseQuery(productsQuery, req({ query: { q: 'x'.repeat(100) } })).q).toHaveLength(100);
-  });
-
-  it('ignora parámetros desconocidos de la query', () => {
-    expect(parseQuery(productsQuery, req({ query: { desconocido: '1' } }))).toEqual({
-      page: 1,
-      pageSize: 12,
     });
   });
 });

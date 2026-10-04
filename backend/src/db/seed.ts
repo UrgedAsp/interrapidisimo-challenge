@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { env } from '../config/env.js';
-import { openDatabase, applySchema, type DatabaseConnection } from './database.js';
+import { openDatabase, applySchema, type DatabaseConnection } from './connection.js';
 
 const SEED_DIR = join(dirname(fileURLToPath(import.meta.url)), 'seed-data');
 

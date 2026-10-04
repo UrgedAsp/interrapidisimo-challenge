@@ -117,11 +117,40 @@ robado no sirva para averiguar el correo de nadie ni conocer un saldo que ya
 cambió. Los intentos de login no tienen límite y el token vive en
 `localStorage`: son riesgos conocidos, documentados en `specs/10-backend-auth.md` §6.
 
+## Catálogo: cómo funciona y qué no
+
+`GET /api/products` resuelve paginación, filtro por categoría y búsqueda en SQL, no
+en memoria. Detalles en [`specs/10-backend-products.md`](specs/10-backend-products.md);
+aquí van las limitaciones, que son decisiones y no descuido:
+
+- **La búsqueda recorre todos los productos.** `LIKE '%texto%'` sobre una función no
+  usa índice, así que con 40 filas es instantáneo y con 40 000 sería un problema. La
+  salida es FTS5 o una columna normalizada e indexada, ambas para una segunda
+  iteración.
+- **La `ñ` se busca como `n`.** Buscar "nino" encuentra "Niño". Es el efecto del NFD
+  que quita tildes, y es lo habitual en buscadores en español.
+- **`%`, `_` y `\` se escapan**, así que buscar `%` no devuelve el catálogo entero. Sin
+  eso, los comodines de `LIKE` serían alcanzables desde la URL.
+- **El filtro de categoría usa dos sentencias, no una.** La forma de una sola
+  consulta (`:category IS NULL OR c.slug = :category`) es más elegante pero hace que
+  SQLite ignore `idx_products_category` y recorra la tabla siempre. Verificado con
+  `EXPLAIN QUERY PLAN`. Las dos sentencias son texto fijo: ningún valor del usuario
+  entra concatenado en el SQL.
+- **El orden ignora el caso pero no la tilde.** `COLLATE NOCASE` solo pliega el caso de
+  las letras ASCII, así que "Máscara de pestañas" queda después de "Mesa de noche": las
+  tildes se comparan por byte UTF-8, donde `á` vale más que `e`. El orden sí es estable
+  entre páginas, que es lo que evita que la paginación repita u omita productos. Ordenar
+  por `normalize_text(name)` daría un orden más natural pero obligaría a un sort en cada
+  petición.
+- **Paginación por `OFFSET`.** Con 40 productos no hay problema; con muchas, el
+  `OFFSET` alto empieza a recorrer filas para luego descartarlas.
+
 ## Estructura
 
 ```
 backend/src/db/       # esquema, conexión y seed
-backend/src/shared/   # contrato: tipos, AppError, validación, middlewares
+backend/src/shared/   # contrato: tipos, AppError, validación, middlewares, texto
+backend/src/modules/  # un módulo por feature: routes -> controller -> service -> repository
 frontend/src/lib/     # apiClient y token store
 frontend/src/types/   # espejo del contrato
 specs/                # fuente de verdad del proyecto

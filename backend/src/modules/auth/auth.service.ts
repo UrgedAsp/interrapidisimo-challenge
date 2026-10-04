@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import bcrypt from 'bcrypt';
 import { env } from '../../config/env.js';
-import type { DatabaseConnection } from '../../db/database.js';
+import type { DatabaseConnection } from '../../db/connection.js';
 import { invalidCredentials, unauthorized } from '../../shared/errors.js';
 import { signToken } from '../../shared/jwt.js';
 import type { LoginResult, User } from '../../shared/types.js';

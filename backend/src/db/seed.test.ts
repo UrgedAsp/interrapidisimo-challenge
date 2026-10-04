@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import bcrypt from 'bcrypt';
-import type { DatabaseConnection } from './database.js';
+import type { DatabaseConnection } from './connection.js';
 import { createTestDatabase, countRows, seed, seedSummary } from './testing.js';
 
 let db: DatabaseConnection;

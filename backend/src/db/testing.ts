@@ -1,5 +1,5 @@
-import type { DatabaseConnection } from './database.js';
-import { applySchema, openDatabase } from './database.js';
+import type { DatabaseConnection } from './connection.js';
+import { applySchema, openDatabase } from './connection.js';
 import { seed, seedSummary } from './seed.js';
 
 export const IN_MEMORY = ':memory:';

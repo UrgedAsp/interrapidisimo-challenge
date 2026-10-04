@@ -1,6 +1,6 @@
 import { createApp } from './app.js';
 import { env } from './config/env.js';
-import { openDatabaseWithSchema } from './db/database.js';
+import { openDatabaseWithSchema } from './db/connection.js';
 
 // El esquema se aplica al abrir porque no hay sistema de migraciones
 // (`01-data-model.md` §2). Todas las sentencias son `IF NOT EXISTS`, así que

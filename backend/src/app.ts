@@ -1,12 +1,14 @@
 import cors from 'cors';
 import express from 'express';
 import { env } from './config/env.js';
-import type { DatabaseConnection } from './db/database.js';
+import type { DatabaseConnection } from './db/connection.js';
+import { createCategoriesRoutes } from './modules/categories/categories.routes.js';
 import {
   createProtectedAuthRoutes,
   createPublicAuthRoutes,
 } from './modules/auth/auth.routes.js';
 import { createAuthService } from './modules/auth/auth.service.js';
+import { createProductsRoutes } from './modules/products/products.routes.js';
 import { authenticate } from './middlewares/auth.js';
 import { errorHandler, notFound } from './shared/error-middleware.js';
 import { ok } from './shared/responses.js';
@@ -50,6 +52,11 @@ export function createApp(db: DatabaseConnection) {
   api.use(authenticate);
 
   api.use(createProtectedAuthRoutes(authService));
+
+  // Catálogo. Va después de `authenticate` porque `GET /api/products` devuelve
+  // `isFavorite` del usuario: sin token no hay usuario y el campo no tendría sentido.
+  api.use(createProductsRoutes(db));
+  api.use(createCategoriesRoutes(db));
 
   app.use('/api', api);
 
