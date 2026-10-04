@@ -6,7 +6,7 @@ import { signToken, verifyToken } from './jwt.js';
 const firmar = (payload: object, options: jwt.SignOptions = {}) =>
   jwt.sign(payload, env.JWT_SECRET, { algorithm: 'HS256', expiresIn: '1h', ...options });
 
-describe('signToken / verifyToken (§5)', () => {
+describe('signToken / verifyToken (sección 5)', () => {
   it('round-trip conserva el id', () => {
     expect(verifyToken(signToken(7))).toEqual({ id: 7 });
   });

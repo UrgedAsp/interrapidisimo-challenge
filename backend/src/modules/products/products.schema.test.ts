@@ -16,7 +16,7 @@ const issuesOf = (fn: () => unknown) => {
   throw new Error('se esperaba un ZodError');
 };
 
-describe('productsQuery (§4)', () => {
+describe('productsQuery (sección 4)', () => {
   it('acepta categoría y búsqueda', () => {
     expect(
       parseQuery(productsQuery, req({ category: 'tecnologia', q: '  audífonos  ' })),

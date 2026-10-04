@@ -1,8 +1,8 @@
 /**
- * Contrato del API. Espejo de `backend/src/shared/types.ts` (§3).
+ * Contrato del API. Espejo de `backend/src/shared/types.ts` (sección 3).
  *
  * Duplicado a propósito: no hay paquete de tipos compartido entre backend y
- * frontend (recorte documentado en `00-overview.md` §2). Si cambias un tipo
+ * frontend (recorte documentado en `00-overview.md` sección 2). Si cambias un tipo
  * aquí, cámbialo también en el backend.
  */
 

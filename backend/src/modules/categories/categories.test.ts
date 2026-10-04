@@ -25,7 +25,7 @@ const get = (path: string, withToken = true) => {
   return withToken ? call.set('Authorization', `Bearer ${token}`) : call;
 };
 
-describe('GET /api/categories (§5)', () => {
+describe('GET /api/categories (sección 5)', () => {
   it('devuelve todas las categorías ordenadas por nombre', async () => {
     const response = await get('/api/categories');
 

@@ -21,7 +21,7 @@ export type ProductRow = {
 };
 
 /**
- * Fila -> `Product` del contrato (02-api-contract.md §3).
+ * Fila -> `Product` del contrato (02-api-contract.md sección 3).
  *
  * Exportado fuera del módulo de products a propósito: `GET /api/favorites` tiene que
  * devolver exactamente la misma forma de `Product`, y duplicar el mapeo haría que

@@ -4,7 +4,7 @@ import { z } from 'zod';
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(3001),
-  // 10-backend-auth.md §4 pide mínimo 32: con 16 un secreto débil sigue
+  // 10-backend-auth.md sección 4 pide mínimo 32: con 16 un secreto débil sigue
   // arrancando la app y el fallo se descubre tarde, cuando ya hay datos.
   JWT_SECRET: z
     .string({ error: 'JWT_SECRET es obligatoria' })

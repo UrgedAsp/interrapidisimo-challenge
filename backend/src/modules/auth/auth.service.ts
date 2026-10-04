@@ -60,7 +60,7 @@ export function createAuthService(db: DatabaseConnection) {
 
     /**
      * `GET /api/me`. Lee el usuario de la base en vez de fiarse solo del token
-     * porque el saldo de puntos cambia con cada acción que premia y §5 de
+     * porque el saldo de puntos cambia con cada acción que premia y sección 5 de
      * `03-rewards.md` dice que el saldo inicial del frontend sale de aquí.
      *
      * El token solo se verifica por firma y no consulta la base, así que un

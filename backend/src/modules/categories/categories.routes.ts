@@ -5,7 +5,7 @@ import { createCategoriesRepository } from './categories.repository.js';
 import { createCategoriesService } from './categories.service.js';
 
 /**
- * Rutas de categorías (10-backend-products.md §5).
+ * Rutas de categorías (10-backend-products.md sección 5).
  *
  * Se registra bajo el router protegido por el mismo motivo que products:
  * `GET /api/products` devuelve `isFavorite` del usuario y ambos leen de las mismas

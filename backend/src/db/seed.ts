@@ -48,7 +48,7 @@ export function readSeedData(): SeedData {
 /**
  * Carga el seed. Es idempotente por construcción: cada INSERT lleva un
  * `WHERE NOT EXISTS` en vez de un UPSERT, para no depender de una clave natural
- * que el esquema de §4 no declara (`products.name` no es UNIQUE).
+ * que el esquema de sección 4 no declara (`products.name` no es UNIQUE).
  */
 export function seed(db: DatabaseConnection): void {
   const data = readSeedData();

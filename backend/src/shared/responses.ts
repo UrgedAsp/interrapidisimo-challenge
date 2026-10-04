@@ -2,7 +2,7 @@ import type { Response } from 'express';
 import type { ApiList, ApiSuccess, PageMeta } from './types.js';
 
 /**
- * Helpers de respuesta de éxito (§6). Todas las respuestas de éxito del API
+ * Helpers de respuesta de éxito (sección 6). Todas las respuestas de éxito del API
  * pasan por aquí, así que la forma `{ data }` no depende de que cada controller
  * se acuerde.
  */

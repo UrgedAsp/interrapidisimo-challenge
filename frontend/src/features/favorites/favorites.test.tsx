@@ -66,7 +66,7 @@ function renderWithProviders(ui: React.ReactElement, { route = '/' } = {}) {
   );
 }
 
-describe('Favorites Feature (§9 de 20-frontend-favorites.md)', () => {
+describe('Favorites Feature (sección 9 de 20-frontend-favorites.md)', () => {
   beforeEach(() => {
     window.localStorage.clear();
     window.localStorage.setItem('interrapidisimo.token', 'test-token');

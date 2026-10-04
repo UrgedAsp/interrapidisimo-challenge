@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /**
- * `POST /api/auth/login` (§5 de `10-backend-auth.md`).
+ * `POST /api/auth/login` (sección 5 de `10-backend-auth.md`).
  *
  * El correo se recorta y pasa a minúsculas antes de validarse: el login no pide
  * reglas de complejidad, solo que el campo sea un correo, y un espacio pegado al

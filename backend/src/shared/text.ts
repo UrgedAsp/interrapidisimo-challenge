@@ -12,7 +12,7 @@
  *
  * El efecto colateral del NFD es que la `ñ` se vuelve `n`: buscar "nino" encuentra
  * "Niño". Es lo habitual en buscadores en español y así lo documenta
- * `10-backend-products.md` §6.
+ * `10-backend-products.md` sección 6.
  */
 export function normalizeText(value: string): string {
   return value

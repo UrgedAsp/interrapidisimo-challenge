@@ -2,12 +2,12 @@ import { z } from 'zod';
 import { paginationQuery } from '../../shared/schemas.js';
 
 /**
- * Query de `GET /api/products` (10-backend-products.md §4).
+ * Query de `GET /api/products` (10-backend-products.md sección 4).
  *
  * Se extiende de la paginación compartida porque `page` y `pageSize` tienen el
  * mismo contrato en todos los listados paginados.
  *
- * No es `strictObject`: los parámetros desconocidos se ignoran (§4), así que
+ * No es `strictObject`: los parámetros desconocidos se ignoran (sección 4), así que
  * `?utm_source=noticias` no puede romper la petición del catálogo. Los repetidos, en
  * cambio, llegan a Zod como array y sí caen en el 422, porque un `?page=1&page=2`
  * no tiene una lectura razonable.

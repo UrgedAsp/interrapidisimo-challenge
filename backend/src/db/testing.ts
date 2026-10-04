@@ -4,7 +4,7 @@ import { seed, seedSummary } from './seed.js';
 
 export const IN_MEMORY = ':memory:';
 
-/** Base en memoria con el esquema aplicado. Es lo que usan las pruebas (§7). */
+/** Base en memoria con el esquema aplicado. Es lo que usan las pruebas (sección 7). */
 export function createTestDatabase(): DatabaseConnection {
   const db = openDatabase(IN_MEMORY);
   applySchema(db);

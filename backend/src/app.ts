@@ -18,12 +18,12 @@ import { errorHandler, notFound } from './shared/error-middleware.js';
 import { ok } from './shared/responses.js';
 
 /**
- * Todas las rutas cuelgan de `/api` (§1). El orden de los middlewares importa:
+ * Todas las rutas cuelgan de `/api` (sección 1). El orden de los middlewares importa:
  *
  * 1. CORS y parser de JSON, antes de todo.
  * 2. Rutas públicas.
  * 3. `authenticate`: a partir de aquí todo lo registrado debajo exige token
- *    (§1: el único endpoint público es `POST /api/auth/login`). Se deja el guard
+ *    (sección 1: el único endpoint público es `POST /api/auth/login`). Se deja el guard
  *    en un solo lugar en vez de repetirlo ruta por ruta para que olvidar
  *    proteger un endpoint sea difícil.
  * 4. `notFound` y `errorHandler` al final, siempre.

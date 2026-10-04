@@ -30,7 +30,7 @@ function renderWithProviders(ui: React.ReactElement, { route = '/' } = {}) {
   );
 }
 
-describe('Auth Feature (§5 y §8 de 20-frontend-auth.md)', () => {
+describe('Auth Feature (sección 5 y sección 8 de 20-frontend-auth.md)', () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.restoreAllMocks();

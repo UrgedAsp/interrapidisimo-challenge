@@ -27,7 +27,7 @@ const SELECT_COLUMNS = `
 `;
 
 /**
- * Búsqueda: `normalize_text(p.name)` para que "camara" encuentre "Cámara" (§4).
+ * Búsqueda: `normalize_text(p.name)` para que "camara" encuentre "Cámara" (sección 4).
  * El `ESCAPE` es lo que permite que el patrón traiga las barras invertidas que
  * escapan los comodines.
  */

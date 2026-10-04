@@ -33,7 +33,7 @@ const anaEnLaBase = () =>
     )
     .get(CREDENCIALES.email)!;
 
-describe('POST /api/auth/login (§4.1)', () => {
+describe('POST /api/auth/login (sección 4.1)', () => {
   it('devuelve token y usuario dentro de { data }', async () => {
     const response = await post(CREDENCIALES);
 
@@ -86,7 +86,7 @@ describe('POST /api/auth/login (§4.1)', () => {
 
   it('no revela qué correos están registrados', async () => {
     // Los dos fallos son indistinguibles: mismo status, mismo code y mismo
-    // mensaje. Es el criterio de §4.1 sobre el mensaje único.
+    // mensaje. Es el criterio de sección 4.1 sobre el mensaje único.
     const inexistente = await post({
       email: 'nadie@tienda.co',
       password: CREDENCIALES.password,
@@ -98,7 +98,7 @@ describe('POST /api/auth/login (§4.1)', () => {
   });
 });
 
-describe('validación del cuerpo de login (§1, §5)', () => {
+describe('validación del cuerpo de login (sección 1, sección 5)', () => {
   it.each([
     ['correo ausente', { password: 'ClaveDemo123' }, 'email'],
     ['contraseña ausente', { email: CREDENCIALES.email }, 'password'],
@@ -123,7 +123,7 @@ describe('validación del cuerpo de login (§1, §5)', () => {
   });
 });
 
-describe('GET /api/me (§4.1)', () => {
+describe('GET /api/me (sección 4.1)', () => {
   it('devuelve el usuario del token', async () => {
     const response = await me(signToken(anaEnLaBase().id)).expect(
       200,
@@ -181,7 +181,7 @@ describe('GET /api/me (§4.1)', () => {
   });
 });
 
-describe('tokens rechazados por el middleware (§7)', () => {
+describe('tokens rechazados por el middleware (sección 7)', () => {
   const firmar = (payload: object, options: jwt.SignOptions = {}) =>
     jwt.sign(payload, env.JWT_SECRET, { algorithm: 'HS256', expiresIn: '1h', ...options });
 
@@ -207,7 +207,7 @@ describe('tokens rechazados por el middleware (§7)', () => {
   });
 
   it('todos los fallos de token comparten el mismo mensaje', async () => {
-    // §5 pide un mensaje genérico: distinguir "vencido" de "inválido" le diría a
+    // sección 5 pide un mensaje genérico: distinguir "vencido" de "inválido" le diría a
     // quien tenga el token cuándo se emitió.
     const respuestas = await Promise.all([
       me(),
@@ -225,7 +225,7 @@ describe('tokens rechazados por el middleware (§7)', () => {
   it('una ruta protegida cualquiera responde 401 sin token', async () => {
     const response = await request(app).get('/api/products');
 
-    // Todavía no existe (§4.2 llega en el commit de products), pero el guard ya
+    // Todavía no existe (sección 4.2 llega en el commit de products), pero el guard ya
     // corre antes que cualquier ruta, así que el 401 sale igual.
     expect(response.status).toBe(401);
     expect((response.body as ApiErrorBody).error.code).toBe('UNAUTHORIZED');

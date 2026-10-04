@@ -40,7 +40,7 @@ const deleteFavorite = (productId: number | string, token?: string) => {
   return token ? req.set('Authorization', `Bearer ${token}`) : req;
 };
 
-describe('Módulo de Favoritos (§5 y §7 de 10-backend-favorites.md)', () => {
+describe('Módulo de Favoritos (sección 5 y sección 7 de 10-backend-favorites.md)', () => {
   it('GET /api/favorites de un usuario nuevo devuelve data: []', async () => {
     const res = await getFavorites(tokenUser1);
     expect(res.status).toBe(200);

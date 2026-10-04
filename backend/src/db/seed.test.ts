@@ -13,7 +13,7 @@ afterEach(() => {
   db.close();
 });
 
-describe('contenido del seed (§6)', () => {
+describe('contenido del seed (sección 6)', () => {
   it('crea 4 a 5 categorías y unos 40 productos', () => {
     seed(db);
     const summary = seedSummary(db);
@@ -96,7 +96,7 @@ describe('contenido del seed (§6)', () => {
   });
 });
 
-describe('idempotencia (§6)', () => {
+describe('idempotencia (sección 6)', () => {
   it('puede ejecutarse dos veces sin duplicar datos', () => {
     seed(db);
     const first = seedSummary(db);

@@ -29,7 +29,7 @@ function registerFunctions(db: Database.Database): void {
 }
 
 /**
- * Abre una conexión y garantiza que el esquema de §4 exista.
+ * Abre una conexión y garantiza que el esquema de sección 4 exista.
  *
  * `foreign_keys` viene apagado por defecto en SQLite y es por conexión, así que
  * se activa en cada apertura: sin esto las claves foráneas no se validan.

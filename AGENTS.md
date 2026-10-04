@@ -10,7 +10,7 @@ Convenciones del repo. Leer antes de tocar código.
 
 ## Specs
 
-`specs/` es la fuente de verdad. El trabajo se implementa spec por spec, en el orden del índice de `specs/00-overview.md` §10, respetando el plan de commits de §9.
+`specs/` es la fuente de verdad. El trabajo se implementa spec por spec, en el orden del índice de `specs/00-overview.md` sección 10, respetando el plan de commits de sección 9.
 
 - No se implementa nada que no esté en una spec.
 - Si una spec y el código discrepan, la spec gana.
@@ -22,14 +22,14 @@ Convenciones del repo. Leer antes de tocar código.
 - **Solo los repositorios escriben SQL.** Cambiar de base de datos debe afectar únicamente esa capa.
 - La lógica de negocio (reglas de puntos, stock, totales) vive **solo en el servidor**.
 - El `userId` siempre sale del token verificado. Nunca del body, ni de la query, ni de la URL.
-- Toda respuesta del API usa el contrato de `00-overview.md` §5: `{ data }`, `{ data, meta }` o `{ error: { code, message, details } }`. Sin excepciones.
+- Toda respuesta del API usa el contrato de `00-overview.md` sección 5: `{ data }`, `{ data, meta }` o `{ error: { code, message, details } }`. Sin excepciones.
 - Errores de negocio como `AppError`, nunca `throw new Error()` suelto desde un service.
 
 ## Frontend
 
 - Datos en cliente con **TanStack Query**. Nada de estado remoto en `useState`.
 - El cliente nunca calcula puntos ni precios: los recibe del servidor.
-- El token vive en `localStorage` (riesgo de XSS documentado en `00-overview.md` §7).
+- El token vive en `localStorage` (riesgo de XSS documentado en `00-overview.md` sección 7).
 - Tipos duplicados a mano entre `backend/` y `frontend/`. No hay paquete de tipos compartido (recorte documentado).
 
 ## Estilos
@@ -54,6 +54,6 @@ Si algo no compila o falla, se arregla en el mismo commit. No se commitea códig
 
 ## Commits
 
-- Un commit por unidad funcional, siguiendo el plan de `00-overview.md` §9.
+- Un commit por unidad funcional, siguiendo el plan de `00-overview.md` sección 9.
 - Mensajes en inglés, tipo convencional de Angular: `feat(api):`, `chore:`, `docs:`.
 - El cuerpo del commit explica el porqué cuando la decisión no es obvia.

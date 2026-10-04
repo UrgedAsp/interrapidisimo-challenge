@@ -3,7 +3,7 @@ import { env } from './config/env.js';
 import { openDatabaseWithSchema } from './db/connection.js';
 
 // El esquema se aplica al abrir porque no hay sistema de migraciones
-// (`01-data-model.md` §2). Todas las sentencias son `IF NOT EXISTS`, así que
+// (`01-data-model.md` sección 2). Todas las sentencias son `IF NOT EXISTS`, así que
 // levantar el servidor dos veces no cambia nada.
 const db = openDatabaseWithSchema(env.DATABASE_PATH);
 

@@ -45,7 +45,7 @@ const removeItem = (productId: number | string, token?: string) => {
   return token ? req.set('Authorization', `Bearer ${token}`) : req;
 };
 
-describe('Operaciones del carrito (§5 y §7)', () => {
+describe('Operaciones del carrito (sección 5 y sección 7)', () => {
   it('GET /api/cart de un usuario nuevo devuelve carrito vacío', async () => {
     const response = await getCart(tokenUser1);
 

@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 /*
- * Tokens de diseño — specs/00-overview.md §8.
+ * Tokens de diseño — specs/00-overview.md sección 8.
  * Este es el ÚNICO archivo del repo donde se permiten valores hex.
  * Los componentes solo usan utilidades derivadas de estos tokens.
  */

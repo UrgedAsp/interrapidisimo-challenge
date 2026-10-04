@@ -1,7 +1,7 @@
 const TOKEN_KEY = 'interrapidisimo.token';
 
 /**
- * El token vive en `localStorage` (`00-overview.md` §7). El riesgo de XSS está
+ * El token vive en `localStorage` (`00-overview.md` sección 7). El riesgo de XSS está
  * documentado y aceptado: no hay cookie httpOnly porque el API usa
  * `Authorization: Bearer` y no necesita credenciales de CORS.
  *

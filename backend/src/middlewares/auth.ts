@@ -3,7 +3,7 @@ import { unauthorized } from '../shared/errors.js';
 import { verifyToken, type AuthenticatedUser } from '../shared/jwt.js';
 
 /**
- * Middleware de autenticación (§5 de `10-backend-auth.md`). Deja `req.user` y, si
+ * Middleware de autenticación (sección 5 de `10-backend-auth.md`). Deja `req.user` y, si
  * el token falta, está vencido o es inválido, responde 401 UNAUTHORIZED.
  *
  * Los tres casos comparten mensaje a propósito: el cliente solo necesita saber

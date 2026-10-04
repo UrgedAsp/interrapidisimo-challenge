@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /**
- * Esquemas de entrada que el contrato define a nivel de API (§4) y que usan más de
+ * Esquemas de entrada que el contrato define a nivel de API (sección 4) y que usan más de
  * un módulo. Los esquemas propios de un endpoint viven junto a él
  * (`modules/<módulo>/<módulo>.schema.ts`).
  *
@@ -28,7 +28,7 @@ export const productIdParam = z.strictObject({
   productId: z.coerce.number({ error: 'Debe ser un número' }).int('Debe ser un entero').positive(),
 });
 
-/** Cantidad de un ítem de carrito: 1 a 99 (§4.3). */
+/** Cantidad de un ítem de carrito: 1 a 99 (sección 4.3). */
 export const quantity = z.coerce
   .number({ error: 'Debe ser un número' })
   .int('Debe ser un entero')

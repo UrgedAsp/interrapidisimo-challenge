@@ -3,14 +3,14 @@ import { env } from '../config/env.js';
 
 /**
  * Identidad del usuario autenticado. Solo el id: sale del token verificado,
- * nunca del cuerpo, la query o la URL (§1 de `02-api-contract.md`).
+ * nunca del cuerpo, la query o la URL (sección 1 de `02-api-contract.md`).
  */
 export type AuthenticatedUser = { id: number };
 
 const ALGORITHM = 'HS256' as const;
 
 /**
- * §5 de `10-backend-auth.md`: el payload lleva únicamente `sub`. El correo, el
+ * sección 5 de `10-backend-auth.md`: el payload lleva únicamente `sub`. El correo, el
  * saldo y cualquier dato personal se leen de la base cuando hacen falta, para que
  * un token robado no sirva para averiguar el correo de nadie ni para conocer un
  * saldo que ya cambió.

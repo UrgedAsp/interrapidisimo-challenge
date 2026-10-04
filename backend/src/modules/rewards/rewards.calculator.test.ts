@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { calculatePurchasePoints } from './rewards.calculator.js';
 
-describe('calculatePurchasePoints (§2 de 03-rewards.md)', () => {
+describe('calculatePurchasePoints (sección 2 de 03-rewards.md)', () => {
   it('1 producto de $89.900 (x1) otorga 94 puntos', () => {
     // floor(89900/1000) = 89 + 5 = 94
     expect(calculatePurchasePoints(89900, 1)).toBe(94);

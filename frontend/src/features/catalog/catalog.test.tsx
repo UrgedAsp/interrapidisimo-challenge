@@ -81,7 +81,7 @@ function renderWithProviders(ui: React.ReactElement, { route = '/' } = {}) {
   );
 }
 
-describe('Catalog Feature (§12 de 20-frontend-catalog.md)', () => {
+describe('Catalog Feature (sección 12 de 20-frontend-catalog.md)', () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.restoreAllMocks();

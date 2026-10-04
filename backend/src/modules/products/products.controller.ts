@@ -7,7 +7,7 @@ import { productsQuery } from './products.schema.js';
 
 /**
  * Un ZodError lanzado aquí lo traduce el middleware de errores a
- * 422 VALIDATION_ERROR con un `detail` por campo (§4). Por eso no hay try/catch.
+ * 422 VALIDATION_ERROR con un `detail` por campo (sección 4). Por eso no hay try/catch.
  */
 export function createProductsController(service: ProductsService) {
   return {

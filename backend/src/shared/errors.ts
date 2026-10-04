@@ -2,7 +2,7 @@ import type { ErrorCode, ErrorDetail } from './types.js';
 
 /**
  * Error de negocio. Lo lanzan los services y el middleware de errores lo
- * traduce a la forma `{ error: { code, message, details } }` de §2.
+ * traduce a la forma `{ error: { code, message, details } }` de sección 2.
  *
  * Los services nunca lanzan `Error` a secas: un error suelto se convertiría en
  * un 500 genérico y perdería el código que el cliente necesita.
@@ -27,7 +27,7 @@ export const badRequest = (message: string, details?: ErrorDetail[]) =>
   new AppError(400, 'BAD_REQUEST', message, details);
 
 /**
- * Mensaje único de 401. §5 de `10-backend-auth.md` pide no distinguir por qué
+ * Mensaje único de 401. sección 5 de `10-backend-auth.md` pide no distinguir por qué
  * falló la autenticación: un mensaje que dijera "tu sesión expiró" revelaría
  * cuándo se emitió el token que tiene el atacante.
  */

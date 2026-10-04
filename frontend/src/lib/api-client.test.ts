@@ -29,7 +29,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe('apiClient (§5 y §13 de 20-frontend-base.md)', () => {
+describe('apiClient (sección 5 y sección 13 de 20-frontend-base.md)', () => {
   it('apiGet devuelve el contenido de data, no el sobre completo', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ data: { id: 1, name: 'Licuadora' } }));
 
@@ -128,7 +128,7 @@ describe('apiClient (§5 y §13 de 20-frontend-base.md)', () => {
   });
 });
 
-describe('Utilidades (§11 de 20-frontend-base.md)', () => {
+describe('Utilidades (sección 11 de 20-frontend-base.md)', () => {
   it('formatCOP formatea valores en pesos colombianos sin decimales', () => {
     const formatted = formatCOP(89900);
     expect(formatted).toMatch(/89\.900/);

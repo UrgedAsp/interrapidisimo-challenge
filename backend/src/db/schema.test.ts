@@ -39,7 +39,7 @@ afterEach(() => {
 });
 
 describe('esquema', () => {
-  it('crea todas las tablas de §4', () => {
+  it('crea todas las tablas de sección 4', () => {
     const rows = db
       .prepare<[], { name: string }>("SELECT name FROM sqlite_master WHERE type = 'table'")
       .all();
@@ -60,7 +60,7 @@ describe('esquema', () => {
     }
   });
 
-  it('crea los índices descritos en §4', () => {
+  it('crea los índices descritos en sección 4', () => {
     const rows = db
       .prepare<[], { name: string }>("SELECT name FROM sqlite_master WHERE type = 'index'")
       .all();
@@ -85,7 +85,7 @@ describe('esquema', () => {
   });
 });
 
-describe('§2 fechas en ISO 8601 UTC', () => {
+describe('sección 2 fechas en ISO 8601 UTC', () => {
   it('created_at es ISO 8601 con zona, no el texto de CURRENT_TIMESTAMP', () => {
     const userId = insertUser();
 
@@ -143,7 +143,7 @@ describe('§2 fechas en ISO 8601 UTC', () => {
   });
 });
 
-describe('normalize_text de §4', () => {
+describe('normalize_text de sección 4', () => {
   it('quita tildes y baja a minúsculas', () => {
     const row = db
       .prepare<[string], { value: string }>("SELECT normalize_text(?) AS value")
@@ -177,7 +177,7 @@ describe('normalize_text de §4', () => {
 
   it('está registrada en cada conexión, no solo en la primera', () => {
     // Si alguien abre la base con better-sqlite3 sin pasar por openDatabase(), la
-    // función no existe y la búsqueda de §5 falla en runtime, no al compilar.
+    // función no existe y la búsqueda de sección 5 falla en runtime, no al compilar.
     const segunda = createTestDatabase();
 
     expect(segunda.prepare("SELECT normalize_text('ÁÉÍÓÚ') AS v").get()).toEqual({ v: 'aeiou' });

@@ -4,7 +4,7 @@ import { toLikePattern, type ProductsRepository } from './products.repository.js
 import type { ProductsQuery } from './products.schema.js';
 
 /**
- * Reglas del listado de catálogo (10-backend-products.md §4).
+ * Reglas del listado de catálogo (10-backend-products.md sección 4).
  *
  * No calcula nada que no venga de la base: la paginación, el orden y el total se
  * resuelven en SQL y aquí solo se arma el `meta`. El service no elige qué productos

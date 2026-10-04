@@ -112,7 +112,7 @@ const TestCartContainer: React.FC = () => {
   );
 };
 
-describe('Cart Feature (§11 de 20-frontend-cart.md)', () => {
+describe('Cart Feature (sección 11 de 20-frontend-cart.md)', () => {
   beforeEach(() => {
     window.localStorage.clear();
     window.localStorage.setItem('interrapidisimo.token', 'test-token');

@@ -166,7 +166,7 @@ describe('notFound', () => {
   });
 });
 
-describe('helpers de éxito (§2, §6)', () => {
+describe('helpers de éxito (sección 2, sección 6)', () => {
   it('ok() produce { data }', async () => {
     const app = testApp((api) => {
       api.get('/ok', (_req, res) => ok(res, { id: 1 }));

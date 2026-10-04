@@ -40,7 +40,7 @@ const products = async (path = '/api/products'): Promise<ApiList<Product>> => {
 const names = (list: ApiList<Product>) => list.data.map((p) => p.name);
 const ids = (list: ApiList<Product>) => list.data.map((p) => p.id);
 
-describe('GET /api/products sin parámetros (§4)', () => {
+describe('GET /api/products sin parámetros (sección 4)', () => {
   it('devuelve la primera página de 12 con el meta real', async () => {
     const response = await get('/api/products');
 
@@ -86,7 +86,7 @@ describe('GET /api/products sin parámetros (§4)', () => {
   });
 });
 
-describe('paginación estable (§4)', () => {
+describe('paginación estable (sección 4)', () => {
   it('el orden es por name y las páginas no se solapan', async () => {
     const primera = await products('/api/products?pageSize=12&page=1');
     const segunda = await products('/api/products?pageSize=12&page=2');
@@ -139,7 +139,7 @@ describe('paginación estable (§4)', () => {
   });
 });
 
-describe('filtro por categoría (§4)', () => {
+describe('filtro por categoría (sección 4)', () => {
   it('devuelve solo productos de ese slug y el total refleja el filtro', async () => {
     const lista = await products('/api/products?category=hogar&pageSize=50');
 
@@ -182,7 +182,7 @@ describe('filtro por categoría (§4)', () => {
   });
 });
 
-describe('búsqueda por nombre (§4)', () => {
+describe('búsqueda por nombre (sección 4)', () => {
   it('encuentra un producto escrito con tilde sin escribirla', async () => {
     // "Espátula de bambú" está en el seed; "espatula" no lleva la tilde.
     const lista = await products('/api/products?q=espatula');
@@ -209,7 +209,7 @@ describe('búsqueda por nombre (§4)', () => {
 
   it('la ñ se busca como n', async () => {
     // "Máscara de pestañas" está en el seed. Efecto colateral del NFD documentado
-    // en §6: la tilde de la ñ se quita y queda "pestanas".
+    // en sección 6: la tilde de la ñ se quita y queda "pestanas".
     const conN = await products('/api/products?q=pestanas&pageSize=50');
     const conEnie = await products('/api/products?q=pesta%C3%B1as&pageSize=50');
 
@@ -245,7 +245,7 @@ describe('búsqueda por nombre (§4)', () => {
   });
 });
 
-describe('los comodines de LIKE se escapan (§4)', () => {
+describe('los comodines de LIKE se escapan (sección 4)', () => {
   it('buscar % no devuelve el catálogo entero', async () => {
     // Sin escapar, `%` es un comodín que casa con cualquier texto.
     const lista = await products('/api/products?q=%25&pageSize=50');
@@ -280,7 +280,7 @@ describe('los comodines de LIKE se escapan (§4)', () => {
   });
 });
 
-describe('isFavorite por usuario (§4)', () => {
+describe('isFavorite por usuario (sección 4)', () => {
   it('es true solo para los productos que el usuario marcó', async () => {
     const antes = await products('/api/products?pageSize=50');
     const objetivo = antes.data[3]!;
@@ -308,7 +308,7 @@ describe('isFavorite por usuario (§4)', () => {
   });
 });
 
-describe('validación de la query (§4)', () => {
+describe('validación de la query (sección 4)', () => {
   it('rechaza page=0, pageSize=51 y page=abc con 422 y details', async () => {
     for (const query of ['page=0', 'pageSize=51', 'page=abc', 'page=2abc', 'pageSize=0']) {
       const response = await get(`/api/products?${query}`);
@@ -350,7 +350,7 @@ describe('validación de la query (§4)', () => {
   });
 });
 
-describe('protección del catálogo (§4)', () => {
+describe('protección del catálogo (sección 4)', () => {
   it('sin token responde 401 en products', async () => {
     const response = await get('/api/products', false);
 

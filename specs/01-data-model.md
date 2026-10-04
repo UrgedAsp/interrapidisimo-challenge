@@ -21,11 +21,11 @@ Todo `created_at` es **texto ISO 8601 en UTC**, con milisegundos y `Z`: `2026-10
 
 El default es `strftime('%Y-%m-%dT%H:%M:%fZ', 'now')` y **no** `CURRENT_TIMESTAMP`. No es equivalente: `CURRENT_TIMESTAMP` escribe `2026-10-04 18:01:14`, sin `T`, sin milisegundos y sin zona, y `new Date()` interpreta ese texto como **hora local**. En una máquina en UTC-5, una fila escrita a las 18:01 se leía como las 13:01. El desfase dependía de dónde se ejecutara el servidor.
 
-> Sin migraciones (§8), cambiar el default no reescribe filas ya existentes: una base creada antes del cambio queda con ambos formatos mezclados hasta que se regenere. La base de desarrollo se reconstruye borrándola y corriendo `npm run seed`, que es la vía documentada para obtener una base consistente.
+> Sin migraciones (sección 8), cambiar el default no reescribe filas ya existentes: una base creada antes del cambio queda con ambos formatos mezclados hasta que se regenere. La base de desarrollo se reconstruye borrándola y corriendo `npm run seed`, que es la vía documentada para obtener una base consistente.
 
 ### Texto buscable
 
-La búsqueda por nombre (§5) no compara la columna cruda sino el texto normalizado con `normalize_text()`, una función registrada en cada conexión que pasa a minúsculas y quita tildes (NFD, quitando los diacríticos). Así `"Jamón Rástico"` coincide con una búsqueda de `jamon`.
+La búsqueda por nombre (sección 5) no compara la columna cruda sino el texto normalizado con `normalize_text()`, una función registrada en cada conexión que pasa a minúsculas y quita tildes (NFD, quitando los diacríticos). Así `"Jamón Rástico"` coincide con una búsqueda de `jamon`.
 
 `normalize_text()` va como función registrada y no dentro del `WHERE` de cada consulta porque el orden de evaluación de los predicados en SQLite no está garantizado: escrito en línea, `normalize_text(name) LIKE ?` puede ejecutarse en el orden que quiera. Dentro de una función registrada el motor resuelve el índice antes de invocarla, así que el orden deja de importar. Se declara `deterministic` para que SQLite la permita en índices y en planes con `LIKE`/`GLOB`.
 
@@ -84,7 +84,7 @@ erDiagram
 - `idx_products_category` sobre `category_id`.
 - `idx_products_name` sobre `name COLLATE NOCASE`.
 
-> La búsqueda por nombre usa `LIKE '%q%'` sobre `normalize_text(name)` (ver §2, "Texto buscable"), por lo que no aprovecha el índice: con un catálogo de ~40 productos es irrelevante. El índice de nombre sirve para el ordenamiento alfabético, que es lo que lo justifica. La mejora (FTS5) queda para una segunda iteración.
+> La búsqueda por nombre usa `LIKE '%q%'` sobre `normalize_text(name)` (ver sección 2, "Texto buscable"), por lo que no aprovecha el índice: con un catálogo de ~40 productos es irrelevante. El índice de nombre sirve para el ordenamiento alfabético, que es lo que lo justifica. La mejora (FTS5) queda para una segunda iteración.
 
 ### carts
 

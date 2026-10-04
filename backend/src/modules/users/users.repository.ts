@@ -2,7 +2,7 @@ import type { DatabaseConnection } from '../../db/connection.js';
 
 /**
  * Fila de `users` tal como la devuelve SQLite. `snake_case` y sin transformar:
- * el mapeo a `User` (camelCase del contrato, §3) es del service, no de aquí.
+ * el mapeo a `User` (camelCase del contrato, sección 3) es del service, no de aquí.
  */
 export type UserRow = {
   id: number;
@@ -15,7 +15,7 @@ export type UserRow = {
 const SELECT_USER = 'SELECT id, email, name, password_hash, points_balance FROM users';
 
 /**
- * Acceso a la tabla `users` (§3 de `10-backend-auth.md`). Vive en su propio módulo
+ * Acceso a la tabla `users` (sección 3 de `10-backend-auth.md`). Vive en su propio módulo
  * y no dentro de auth porque el carrito y los favoritos también van a necesitar
  * leer usuarios; si el repository fuera de auth, esos módulos dependerían de él
  * para algo que no es autenticación.

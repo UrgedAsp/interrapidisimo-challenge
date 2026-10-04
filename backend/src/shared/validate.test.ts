@@ -17,7 +17,7 @@ const issuesOf = (fn: () => unknown) => {
   throw new Error('se esperaba un ZodError');
 };
 
-describe('paginación (§4.2)', () => {
+describe('paginación (sección 4.2)', () => {
   it('aplica los valores por defecto', () => {
     expect(parseQuery(paginationQuery, req({ query: {} }))).toEqual({ page: 1, pageSize: 12 });
   });
@@ -37,7 +37,7 @@ describe('paginación (§4.2)', () => {
     [{ pageSize: '0' }, 'pageSize'],
     [{ pageSize: '51' }, 'pageSize'],
     [{ pageSize: '999' }, 'pageSize'],
-  ])('rechaza %o (§7: 422 con details por campo)', (query, field) => {
+  ])('rechaza %o (sección 7: 422 con details por campo)', (query, field) => {
     expect(issuesOf(() => parseQuery(paginationQuery, req({ query })))).toContainEqual(
       expect.stringContaining(field),
     );
@@ -55,7 +55,7 @@ describe('paginación (§4.2)', () => {
   });
 });
 
-describe('params de producto (§4.4)', () => {
+describe('params de producto (sección 4.4)', () => {
   it('convierte el id de la ruta', () => {
     expect(parseParams(productIdParam, req({ params: { productId: '12' } }))).toEqual({ productId: 12 });
   });
@@ -65,7 +65,7 @@ describe('params de producto (§4.4)', () => {
   });
 });
 
-describe('cuerpo del carrito (§4.3)', () => {
+describe('cuerpo del carrito (sección 4.3)', () => {
   it('la cantidad es opcional y por defecto 1', () => {
     expect(parseBody(addCartItemBody, req({ body: { productId: '5' } }))).toEqual({
       productId: 5,
@@ -73,7 +73,7 @@ describe('cuerpo del carrito (§4.3)', () => {
     });
   });
 
-  it('rechaza puntos en el cuerpo (§7)', () => {
+  it('rechaza puntos en el cuerpo (sección 7)', () => {
     expect(issuesOf(() => parseBody(addCartItemBody, req({ body: { productId: 5, points: 500 } })))).toEqual([
       ': Llave desconocida: "points"',
     ]);
@@ -94,7 +94,7 @@ describe('cuerpo del carrito (§4.3)', () => {
   });
 });
 
-describe('validationDetails (§2)', () => {
+describe('validationDetails (sección 2)', () => {
   it('traduce los mensajes de Zod al español', () => {
     const details = validationDetails(
       paginationQuery.safeParse({ page: '0' }).error as ZodError,

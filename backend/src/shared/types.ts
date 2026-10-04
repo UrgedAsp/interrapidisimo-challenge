@@ -1,8 +1,8 @@
 /**
- * Contrato del API. Espejo de `frontend/src/types/api.ts` (§3).
+ * Contrato del API. Espejo de `frontend/src/types/api.ts` (sección 3).
  *
  * Los tipos están duplicados a propósito: no hay paquete compartido entre
- * backend y frontend (recorte documentado en `00-overview.md` §2).
+ * backend y frontend (recorte documentado en `00-overview.md` sección 2).
  */
 
 /** Códigos de error. Son estables: es lo que el cliente usa para decidir qué mostrar. */

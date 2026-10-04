@@ -5,7 +5,7 @@ import { createProductsRepository } from './products.repository.js';
 import { createProductsService } from './products.service.js';
 
 /**
- * Rutas del catálogo (10-backend-products.md §3).
+ * Rutas del catálogo (10-backend-products.md sección 3).
  *
  * No se vuelven a montar sobre `/api` desde app.ts: se registra bajo el router
  * protegido, así que el guard de `authenticate` ya corre antes. `isFavorite`

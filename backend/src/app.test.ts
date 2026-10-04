@@ -10,7 +10,7 @@ const app = () => createApp(createTestDatabase());
 
 const validToken = () => signToken(42);
 
-describe('contrato de respuestas (§2)', () => {
+describe('contrato de respuestas (sección 2)', () => {
   it('envuelve el éxito en { data }', async () => {
     const response = await request(app()).get('/api/health');
 
@@ -46,7 +46,7 @@ describe('contrato de respuestas (§2)', () => {
   });
 });
 
-describe('autenticación (§1, §4)', () => {
+describe('autenticación (sección 1, sección 4)', () => {
   it('rechaza sin cabecera Authorization', async () => {
     const response = await request(app()).get('/api/privado');
 
@@ -94,7 +94,7 @@ describe('autenticación (§1, §4)', () => {
   });
 });
 
-describe('JSON mal formado (§5)', () => {
+describe('JSON mal formado (sección 5)', () => {
   it('responde 400 BAD_REQUEST si el cuerpo no es JSON', async () => {
     const response = await request(app())
       .post('/api/health')
@@ -108,7 +108,7 @@ describe('JSON mal formado (§5)', () => {
   });
 });
 
-describe('CORS (§1)', () => {
+describe('CORS (sección 1)', () => {
   it('habilita el origen del frontend configurado', async () => {
     const response = await request(app()).get('/api/health').set('Origin', 'http://localhost:5173');
 

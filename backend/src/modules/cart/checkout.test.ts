@@ -24,7 +24,7 @@ const checkout = (token?: string) => {
   return token ? req.set('Authorization', `Bearer ${token}`) : req;
 };
 
-describe('Checkout y recompensas de compra (§6 de 10-backend-cart.md y 03-rewards.md)', () => {
+describe('Checkout y recompensas de compra (sección 6 de 10-backend-cart.md y 03-rewards.md)', () => {
   it('checkout con carrito vacío responde 409 CART_EMPTY', async () => {
     const res = await checkout(tokenUser1);
     expect(res.status).toBe(409);
