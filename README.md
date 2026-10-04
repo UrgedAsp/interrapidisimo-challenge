@@ -48,7 +48,7 @@ Para validar todos los criterios de evaluación en orden:
 1. **Clonar repositorio e instalar dependencias:**
 
    ```bash
-   git clone <url-del-repo>
+   git clone https://github.com/UrgedAsp/interrapidisimo-challenge.git
    cd interrapidisimo
    npm install
    ```
