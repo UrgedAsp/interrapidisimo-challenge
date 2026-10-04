@@ -34,7 +34,10 @@ export const CartItemRow: React.FC<CartItemRowProps> = ({
       {/* Info y Controles */}
       <div className="flex-1 min-w-0 space-y-1">
         <div className="flex items-start justify-between gap-2">
-          <h4 className="text-xs sm:text-sm font-medium text-primary line-clamp-1">
+          <h4
+            title={item.name}
+            className="text-xs sm:text-sm font-medium text-primary line-clamp-1"
+          >
             {item.name}
           </h4>
           <button
