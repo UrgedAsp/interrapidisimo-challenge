@@ -9,6 +9,7 @@ import {
 } from './modules/auth/auth.routes.js';
 import { createAuthService } from './modules/auth/auth.service.js';
 import { createProductsRoutes } from './modules/products/products.routes.js';
+import { createCartRoutes } from './modules/cart/cart.routes.js';
 import { authenticate } from './middlewares/auth.js';
 import { errorHandler, notFound } from './shared/error-middleware.js';
 import { ok } from './shared/responses.js';
@@ -57,6 +58,7 @@ export function createApp(db: DatabaseConnection) {
   // `isFavorite` del usuario: sin token no hay usuario y el campo no tendría sentido.
   api.use(createProductsRoutes(db));
   api.use(createCategoriesRoutes(db));
+  api.use(createCartRoutes(db));
 
   app.use('/api', api);
 

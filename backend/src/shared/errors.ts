@@ -53,3 +53,12 @@ export const cartItemNotFound = (productId: number) =>
   new AppError(404, 'CART_ITEM_NOT_FOUND', 'El producto no está en el carrito', [
     { productId, message: 'El carrito no tiene ese producto' },
   ]);
+
+export const outOfStock = (productId: number, message: string = 'Sin stock suficiente') =>
+  new AppError(409, 'OUT_OF_STOCK', 'Sin stock suficiente', [
+    { productId, message },
+  ]);
+
+export const cartEmpty = () =>
+  new AppError(409, 'CART_EMPTY', 'El carrito está vacío');
+
