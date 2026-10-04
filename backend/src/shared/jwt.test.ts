@@ -3,46 +3,47 @@ import { describe, expect, it } from 'vitest';
 import { env } from '../config/env.js';
 import { signToken, verifyToken } from './jwt.js';
 
-const bearer = (payload: object, secret = env.JWT_SECRET) =>
-  jwt.sign(payload, secret, { algorithm: 'HS256', expiresIn: '1h' });
+const firmar = (payload: object, options: jwt.SignOptions = {}) =>
+  jwt.sign(payload, env.JWT_SECRET, { algorithm: 'HS256', expiresIn: '1h', ...options });
 
-describe('signToken / verifyToken', () => {
-  it('round-trip conserva el id y el correo', () => {
-    const payload = verifyToken(signToken({ id: 7, email: 'ana@tienda.co' }));
+describe('signToken / verifyToken (§5)', () => {
+  it('round-trip conserva el id', () => {
+    expect(verifyToken(signToken(7))).toEqual({ id: 7 });
+  });
 
-    expect(payload).toEqual({ sub: 7, email: 'ana@tienda.co' });
+  it('el payload lleva solo sub: ni correo, ni puntos, ni nombre', () => {
+    const payload = jwt.decode(signToken(7)) as Record<string, unknown>;
+
+    // `iat` y `exp` los agrega la librería. Lo que no debe aparecer es nada
+    // que identifique a la persona o su saldo.
+    expect(Object.keys(payload).sort()).toEqual(['exp', 'iat', 'sub']);
+    expect(payload.sub).toBe('7');
   });
 
   it('rechaza un token firmado con otro secreto', () => {
-    const token = bearer({ sub: '1', email: 'ana@tienda.co' }, 'secreto-del-atacante');
+    const token = jwt.sign({ sub: '1' }, 'secreto-del-atacante', { algorithm: 'HS256' });
 
     expect(() => verifyToken(token)).toThrow(jwt.JsonWebTokenError);
   });
 
   it('rechaza un token expirado', () => {
-    const token = jwt.sign({ email: 'ana@tienda.co' }, env.JWT_SECRET, {
-      subject: '1',
-      expiresIn: '-1s',
-    });
-
-    expect(() => verifyToken(token)).toThrow(jwt.TokenExpiredError);
+    expect(() => verifyToken(firmar({ sub: '1' }, { expiresIn: '-1s' }))).toThrow(
+      jwt.TokenExpiredError,
+    );
   });
 
   it('rechaza "alg: none"', () => {
     const token = `${Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64url')}.${Buffer.from(
-      JSON.stringify({ sub: '1', email: 'ana@tienda.co' }),
+      JSON.stringify({ sub: '1' }),
     ).toString('base64url')}.`;
 
     expect(() => verifyToken(token)).toThrow();
   });
 
   it('fuerza HS256 y no acepta otros algoritmos', () => {
-    const token = jwt.sign({ email: 'ana@tienda.co' }, env.JWT_SECRET, {
-      subject: '1',
-      algorithm: 'HS384',
-    });
-
-    expect(() => verifyToken(token)).toThrow(jwt.JsonWebTokenError);
+    expect(() => verifyToken(firmar({ sub: '1' }, { algorithm: 'HS384' }))).toThrow(
+      jwt.JsonWebTokenError,
+    );
   });
 
   it.each([
@@ -51,10 +52,6 @@ describe('signToken / verifyToken', () => {
     ['con sub cero', { sub: '0' }],
     ['con sub negativo', { sub: '-5' }],
   ])('rechaza un token %s', (_caso, payload) => {
-    expect(() => verifyToken(bearer(payload))).toThrow(jwt.JsonWebTokenError);
-  });
-
-  it('acepta un token sin correo, porque el id es lo obligatorio', () => {
-    expect(verifyToken(bearer({ sub: '9' }))).toEqual({ sub: 9, email: '' });
+    expect(() => verifyToken(firmar(payload))).toThrow(jwt.JsonWebTokenError);
   });
 });

@@ -10,6 +10,9 @@ export default defineConfig({
       NODE_ENV: 'test',
       JWT_SECRET: 'secreto-solo-para-pruebas-no-usar-en-produccion',
       DATABASE_PATH: ':memory:',
+      // Costo mínimo de bcrypt. Con 10 el suite paga un hasheado caro por cada
+      // login sin que cambie nada de lo que se prueba.
+      BCRYPT_ROUNDS: '4',
     },
   },
 });

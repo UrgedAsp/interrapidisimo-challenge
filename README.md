@@ -102,10 +102,20 @@ Variables de entorno relevantes:
 
 | Variable | Defecto | Para qué |
 |---|---|---|
-| `JWT_SECRET` | — (obligatoria) | Firma y verificación del token |
+| `JWT_SECRET` | — (obligatoria, mínimo 32 caracteres) | Firma y verificación del token. Si falta o es corta, la app no arranca |
 | `JWT_EXPIRES_IN` | `1h` | Vigencia del token |
+| `BCRYPT_ROUNDS` | `10` | Costo de bcrypt al sembrar. Las pruebas usan `4` |
 | `DATABASE_PATH` | `./data/app.db` | Ruta del archivo SQLite |
 | `FRONTEND_ORIGIN` | `http://localhost:5173` | Único origen con CORS |
+
+Se validan una sola vez al iniciar, en `backend/src/config/env.ts`. El resto del
+código importa ese módulo, nunca `process.env`.
+
+El payload del JWT lleva **solo** el id del usuario (`sub`). El correo, el nombre
+y el saldo de puntos se leen de la base cuando hacen falta, para que un token
+robado no sirva para averiguar el correo de nadie ni conocer un saldo que ya
+cambió. Los intentos de login no tienen límite y el token vive en
+`localStorage`: son riesgos conocidos, documentados en `specs/10-backend-auth.md` §6.
 
 ## Estructura
 

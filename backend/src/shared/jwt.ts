@@ -2,22 +2,28 @@ import jwt from 'jsonwebtoken';
 import { env } from '../config/env.js';
 
 /**
- * Identidad del usuario autenticado. `sub` es el id del usuario y siempre sale
- * del token verificado, nunca del cuerpo, la query o la URL (§1).
+ * Identidad del usuario autenticado. Solo el id: sale del token verificado,
+ * nunca del cuerpo, la query o la URL (§1 de `02-api-contract.md`).
  */
-export type AccessTokenPayload = { sub: number; email: string };
+export type AuthenticatedUser = { id: number };
 
 const ALGORITHM = 'HS256' as const;
 
-export function signToken(user: { id: number; email: string }): string {
-  return jwt.sign({ email: user.email }, env.JWT_SECRET, {
-    subject: String(user.id),
+/**
+ * §5 de `10-backend-auth.md`: el payload lleva únicamente `sub`. El correo, el
+ * saldo y cualquier dato personal se leen de la base cuando hacen falta, para que
+ * un token robado no sirva para averiguar el correo de nadie ni para conocer un
+ * saldo que ya cambió.
+ */
+export function signToken(userId: number): string {
+  return jwt.sign({}, env.JWT_SECRET, {
+    subject: String(userId),
     expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'],
     algorithm: ALGORITHM,
   });
 }
 
-export function verifyToken(token: string): AccessTokenPayload {
+export function verifyToken(token: string): AuthenticatedUser {
   // `algorithms` fijo: sin esto un atacante podría ofrecer `alg: none` o un
   // algoritmo asimétrico y cambiar la verificación a su favor.
   const payload = jwt.verify(token, env.JWT_SECRET, { algorithms: [ALGORITHM] });
@@ -26,11 +32,11 @@ export function verifyToken(token: string): AccessTokenPayload {
     throw new jwt.JsonWebTokenError('El token no contiene un payload válido');
   }
 
-  const sub = Number(payload.sub);
+  const id = Number(payload.sub);
 
-  if (!Number.isInteger(sub) || sub <= 0) {
+  if (!Number.isInteger(id) || id <= 0) {
     throw new jwt.JsonWebTokenError('El token no identifica a un usuario válido');
   }
 
-  return { sub, email: String(payload.email ?? '') };
+  return { id };
 }

@@ -26,7 +26,23 @@ export class AppError extends Error {
 export const badRequest = (message: string, details?: ErrorDetail[]) =>
   new AppError(400, 'BAD_REQUEST', message, details);
 
-export const unauthorized = (message: string) => new AppError(401, 'UNAUTHORIZED', message);
+/**
+ * Mensaje único de 401. §5 de `10-backend-auth.md` pide no distinguir por qué
+ * falló la autenticación: un mensaje que dijera "tu sesión expiró" revelaría
+ * cuándo se emitió el token que tiene el atacante.
+ */
+export const UNAUTHORIZED_MESSAGE = 'Inicia sesión para continuar';
+
+export const unauthorized = (message: string = UNAUTHORIZED_MESSAGE) =>
+  new AppError(401, 'UNAUTHORIZED', message);
+
+/**
+ * Login fallido. Un solo mensaje para los dos casos —correo inexistente o
+ * contraseña incorrecta— porque distinguirlos confirmaría qué correos están
+ * registrados en la tienda.
+ */
+export const invalidCredentials = () =>
+  new AppError(401, 'INVALID_CREDENTIALS', 'Correo o contraseña incorrectos');
 
 export const productNotFound = (productId: number) =>
   new AppError(404, 'PRODUCT_NOT_FOUND', 'El producto no existe', [

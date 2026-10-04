@@ -1,11 +1,14 @@
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { createApp } from './app.js';
+import { createTestDatabase } from './db/testing.js';
 import { signToken } from './shared/jwt.js';
 
-const app = () => createApp();
+// Base en memoria: estas pruebas solo miran la forma de la respuesta y el guard,
+// así que no necesitan el seed.
+const app = () => createApp(createTestDatabase());
 
-const validToken = () => signToken({ id: 42, email: 'ana@tienda.co' });
+const validToken = () => signToken(42);
 
 describe('contrato de respuestas (§2)', () => {
   it('envuelve el éxito en { data }', async () => {

@@ -13,8 +13,6 @@ const SEED_USERS = [
   { email: 'carlos@tienda.co', name: 'Carlos Múnera', password: 'ClaveDemo123' },
 ] as const;
 
-const BCRYPT_ROUNDS = 10;
-
 const categorySchema = z.object({
   name: z.string().min(1),
   slug: z.string().min(1),
@@ -97,7 +95,7 @@ export function seed(db: DatabaseConnection): void {
       insertUser.run({
         email: user.email,
         name: user.name,
-        passwordHash: bcrypt.hashSync(user.password, BCRYPT_ROUNDS),
+        passwordHash: bcrypt.hashSync(user.password, env.BCRYPT_ROUNDS),
       });
     }
   });
