@@ -1,3 +1,10 @@
 export { AddToCartButton } from './components/AddToCartButton.js';
+export { CartButton } from './components/CartButton.js';
 export { CartDrawer } from './components/CartDrawer.js';
+export { CartDrawerProvider, useCartDrawer } from './CartDrawerProvider.js';
 export { useCart } from './hooks/useCart.js';
+export { useAddToCart } from './hooks/useAddToCart.js';
+export { useUpdateCartItem } from './hooks/useUpdateCartItem.js';
+export { useRemoveCartItem } from './hooks/useRemoveCartItem.js';
+export { useCheckout } from './hooks/useCheckout.js';
+export type { CartDrawerState, CartDrawerView } from './types/index.js';

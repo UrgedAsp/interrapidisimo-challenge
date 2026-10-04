@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, LogOut, Menu, ShoppingBag, Store, X } from 'lucide-react';
+import { Heart, LogOut, Menu, Store, X } from 'lucide-react';
 import { PointsBadge } from '../../features/auth/components/PointsBadge.js';
 import { useAuth } from '../../features/auth/hooks/useAuth.js';
 import { useMe } from '../../features/auth/hooks/useMe.js';
-import { useCart } from '../../features/cart/hooks/useCart.js';
+import { CartButton } from '../../features/cart/index.js';
 
-interface HeaderProps {
-  onOpenCart: () => void;
-}
-
-export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
+export const Header: React.FC = () => {
   const { logout } = useAuth();
   const { data: user } = useMe();
-  const { cart } = useCart();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
-  const itemCount = cart?.itemCount ?? 0;
 
   return (
     <header className="sticky top-0 z-40 bg-neutral/95 backdrop-blur-sm border-b border-tertiary/20">
@@ -66,19 +60,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart }) => {
             <PointsBadge />
 
             {/* Botón Carrito */}
-            <button
-              type="button"
-              onClick={onOpenCart}
-              aria-label={`Carrito de compras con ${itemCount} productos`}
-              className="relative p-2.5 text-primary hover:text-secondary rounded-[var(--radius-field)] hover:bg-tertiary/10 transition-colors cursor-pointer focus-visible:outline-secondary"
-            >
-              <ShoppingBag size={22} aria-hidden="true" />
-              {itemCount > 0 && (
-                <span className="absolute top-1 right-1 inline-flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold text-neutral bg-secondary rounded-full px-1 shadow-xs animate-in zoom-in-50 duration-200">
-                  {itemCount}
-                </span>
-              )}
-            </button>
+            <CartButton />
 
             {/* Botón Salir Desktop */}
             <button

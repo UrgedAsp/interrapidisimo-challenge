@@ -58,6 +58,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) 
           productId={product.id}
           productName={product.name}
           stock={product.stock}
+          product={product}
           disabled={isOutOfStock}
         />
       </div>

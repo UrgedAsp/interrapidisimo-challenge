@@ -6,10 +6,11 @@ import { MemoryRouter } from 'react-router-dom';
 import type { ApiList, Category, Product } from '../../types/api.js';
 import * as catalogApi from './api/catalogApi.js';
 import { CatalogPage } from './pages/CatalogPage.js';
-import { ProductCard } from './components/ProductCard.js';
 import { Pagination } from './components/Pagination.js';
+import { ProductCard } from './components/ProductCard.js';
 import { ToastProvider } from '../../components/ui/Toast.js';
 import { AuthProvider } from '../auth/AuthProvider.js';
+import { CartDrawerProvider } from '../cart/CartDrawerProvider.js';
 
 const mockCategories: Category[] = [
   { id: 1, name: 'Tecnología', slug: 'tecnologia' },
@@ -71,7 +72,9 @@ function renderWithProviders(ui: React.ReactElement, { route = '/' } = {}) {
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
         <AuthProvider>
-          <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
+          <CartDrawerProvider>
+            <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
+          </CartDrawerProvider>
         </AuthProvider>
       </ToastProvider>
     </QueryClientProvider>,
