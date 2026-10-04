@@ -8,11 +8,14 @@ export type ProductQueryParams = {
   q?: string;
 };
 
-export async function getCategoriesApi(): Promise<Category[]> {
-  return apiGet<Category[]>('/categories');
+export async function getCategoriesApi(signal?: AbortSignal): Promise<Category[]> {
+  return apiGet<Category[]>('/categories', { signal });
 }
 
-export async function getProductsApi(params: ProductQueryParams = {}): Promise<ApiList<Product>> {
+export async function getProductsApi(
+  params: ProductQueryParams = {},
+  signal?: AbortSignal,
+): Promise<ApiList<Product>> {
   return apiGetList<Product>('/products', {
     query: {
       page: params.page,
@@ -20,5 +23,6 @@ export async function getProductsApi(params: ProductQueryParams = {}): Promise<A
       category: params.category,
       q: params.q,
     },
+    signal,
   });
 }
