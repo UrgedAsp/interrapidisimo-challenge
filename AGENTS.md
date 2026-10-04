@@ -6,7 +6,7 @@ Convenciones del repo. Leer antes de tocar código.
 
 - **Documentación, UI y specs en español**: `README.md`, `AGENTS.md`, `specs/**`, textos visibles, mensajes de error, comentarios.
 - **Identificadores de código en inglés**: nombres de variables, funciones, clases, módulos, rutas de archivo, ramas de git.
-- Los tipos, campos de la base de datos y códigos de error del contrato son英文-facing pero sus valores visibles van en español.
+- Los tipos, campos de la base de datos y códigos de error del contrato van en inglés pero sus valores visibles van en español.
 
 ## Specs
 
