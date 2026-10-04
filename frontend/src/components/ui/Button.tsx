@@ -48,7 +48,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         disabled={isDisabled}
         aria-busy={loading}
-        className={`inline-flex items-center justify-center font-medium transition-all duration-150 rounded-[var(--radius-field)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-secondary ${
+        className={`inline-flex items-center justify-center gap-2 font-medium transition-all duration-150 rounded-[var(--radius-field)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-secondary ${
           variantClasses[variant]
         } ${sizeClasses[size]} ${fullWidth ? 'w-full' : ''} ${className}`}
         {...props}
