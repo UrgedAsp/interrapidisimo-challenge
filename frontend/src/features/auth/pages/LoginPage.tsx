@@ -32,7 +32,7 @@ export const LoginPage: React.FC = () => {
             <Sparkles size={24} aria-hidden="true" />
           </div>
           <p className="text-xs uppercase tracking-widest font-semibold text-tertiary">
-            Interrápido Store
+            Interrapidisimo Store
           </p>
           <h1 className="text-3xl font-bold text-primary font-headline mt-1">Inicia sesión</h1>
           <p className="text-primary/70 mt-1 text-sm">

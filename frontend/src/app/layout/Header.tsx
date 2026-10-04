@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
               className="flex items-center gap-2 text-primary font-headline text-xl font-bold tracking-tight hover:opacity-90 transition-opacity"
             >
               <Store size={24} className="text-secondary" aria-hidden="true" />
-              <span>Interrápido Store</span>
+              <span>Interrapidisimo Store</span>
             </Link>
 
             {/* Navegación Desktop */}

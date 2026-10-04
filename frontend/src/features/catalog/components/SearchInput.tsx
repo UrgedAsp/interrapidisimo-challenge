@@ -72,7 +72,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         placeholder="Buscar por nombre"
         maxLength={100}
         aria-label="Buscar productos"
-        className="w-full pl-10 pr-10 py-2.5 bg-neutral border border-tertiary/40 rounded-[var(--radius-field)] text-primary placeholder:text-primary/40 focus:border-secondary focus:ring-1 focus:ring-secondary text-sm transition-colors"
+        className="w-full pl-10 pr-10 py-2.5 bg-neutral border border-tertiary/40 rounded-[var(--radius-field)] text-primary placeholder:text-primary/40 focus:border-secondary focus:ring-1 focus:ring-secondary text-sm transition-colors [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
       />
       {value && (
         <button

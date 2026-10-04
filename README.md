@@ -1,4 +1,4 @@
-# Mini E-Commerce & Gamificación (Inter Rapidísimo)
+# Mini E-Commerce & Gamificación (Interrapidisimo)
 
 Aplicación web full-stack de comercio electrónico con catálogo de productos, carrito persistido en el servidor, checkout atómico y un sistema de recompensas con fidelización de puntos garantizado mediante transacciones y ledger inmutable.
 
@@ -14,7 +14,7 @@ Plataforma de compras en línea que implementa un catálogo filtrable y paginado
 
 Para validar todos los criterios de evaluación en orden:
 
-1. **Iniciar sesión:** Abre `http://localhost:5173`, haz clic en uno de los botones de **Usuario de demostración** (ej. *Ana Pérez*) e inicia sesión.
+1. **Iniciar sesión:** Abre `http://localhost:5173`, haz clic en uno de los botones de **Usuario de demostración** (ej. _Ana Pérez_) e inicia sesión.
 2. **Buscar y filtrar:** En el catálogo, busca `camara` (sin tildes) y selecciona la categoría **Tecnología**. Nota cómo la búsqueda normaliza caracteres, el debounce evita peticiones innecesarias y la URL preserva los filtros para compartirse.
 3. **Probar favoritos y puntos:** Marca un producto con el ícono de corazón. El botón responde de inmediato (actualización optimista) y el saldo en el header suma **2 puntos**. Quita el favorito y vuélvelo a marcar: comprueba que el saldo **no vuelve a aumentar** gracias al ledger idempotente.
 4. **Gestionar carrito:** Agrega varios productos desde la cuadrícula y abre el panel lateral (`Drawer`). Modifica cantidades con los controles `+` y `-` observando el recálculo instantáneo del total.
@@ -25,26 +25,28 @@ Para validar todos los criterios de evaluación en orden:
 
 ## 3. Stack tecnológico
 
-| Capa | Tecnologías | Justificación |
-|---|---|---|
-| **Frontend** | React 19, TypeScript, Vite 8, Tailwind CSS v4, React Router 7 | Renderizado rápido, tipado estricto, utilidades de diseño tokenizadas y navegación SPA. |
-| **Estado Remoto** | TanStack Query v5 | Gestión de caché de servidor, revalidaciones, cancelaciones y actualizaciones optimistas. |
-| **Backend** | Node.js (>= 22.12.0), Express 4, TypeScript | Servidor REST ligero con organización modular estricta por capas. |
-| **Base de Datos** | SQLite con `better-sqlite3` (SQL puro) | Transacciones síncronas (`BEGIN IMMEDIATE`), cero sobrecarga de ORM y portabilidad total. |
-| **Seguridad** | JWT (`jsonwebtoken`), `bcryptjs`, validación Zod | Autenticación basada en token sin estado y validación rigurosa de entradas en cada capa. |
-| **Testing** | Vitest 5, Supertest, Testing Library (React) | Pruebas unitarias y de integración concurrentes en backend y frontend. |
+| Capa              | Tecnologías                                                   | Justificación                                                                             |
+| ----------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Frontend**      | React 19, TypeScript, Vite 8, Tailwind CSS v4, React Router 7 | Renderizado rápido, tipado estricto, utilidades de diseño tokenizadas y navegación SPA.   |
+| **Estado Remoto** | TanStack Query v5                                             | Gestión de caché de servidor, revalidaciones, cancelaciones y actualizaciones optimistas. |
+| **Backend**       | Node.js (>= 22.12.0), Express 4, TypeScript                   | Servidor REST ligero con organización modular estricta por capas.                         |
+| **Base de Datos** | SQLite con `better-sqlite3` (SQL puro)                        | Transacciones síncronas (`BEGIN IMMEDIATE`), cero sobrecarga de ORM y portabilidad total. |
+| **Seguridad**     | JWT (`jsonwebtoken`), `bcryptjs`, validación Zod              | Autenticación basada en token sin estado y validación rigurosa de entradas en cada capa.  |
+| **Testing**       | Vitest 5, Supertest, Testing Library (React)                  | Pruebas unitarias y de integración concurrentes en backend y frontend.                    |
 
 ---
 
 ## 4. Cómo ejecutar el proyecto
 
 ### Requisitos previos
+
 - **Node.js**: `>= 22.12.0` (debido al soporte de NAPI 9 en `better-sqlite3` y jsdom).
 - **npm**: `>= 10.0.0`.
 
 ### Instalación y configuración inicial
 
 1. **Clonar repositorio e instalar dependencias:**
+
    ```bash
    git clone <url-del-repo>
    cd interrapidisimo
@@ -52,17 +54,21 @@ Para validar todos los criterios de evaluación en orden:
    ```
 
 2. **Configurar variables de entorno:**
+
    ```bash
    cp backend/.env.example backend/.env
    cp frontend/.env.example frontend/.env
    ```
-   *El backend valida sus variables al iniciar mediante Zod (`JWT_SECRET` requiere mínimo 32 caracteres).*
+
+   _El backend valida sus variables al iniciar mediante Zod (`JWT_SECRET` requiere mínimo 32 caracteres)._
 
 3. **Poblar la base de datos (Seed):**
+
    ```bash
    npm run seed
    ```
-   *Genera `./backend/data/app.db` con 5 categorías, 40 productos en COP y 2 usuarios de demostración.*
+
+   _Genera `./backend/data/app.db` con 5 categorías, 40 productos en COP y 2 usuarios de demostración._
 
 4. **Iniciar en desarrollo (Full-stack):**
    ```bash
@@ -70,16 +76,17 @@ Para validar todos los criterios de evaluación en orden:
    ```
 
 ### URLs de acceso
+
 - **Frontend:** [http://localhost:5173](http://localhost:5173)
 - **Backend API:** [http://localhost:3001](http://localhost:3001)
 - **Health check:** [http://localhost:3001/api/health](http://localhost:3001/api/health)
 
 ### Usuarios de demostración
 
-| Nombre | Correo | Contraseña | Puntos iniciales |
-|---|---|---|---|
-| Ana Pérez | `ana@tienda.co` | `ClaveDemo123` | 100 |
-| Carlos Gómez | `carlos@tienda.co` | `ClaveDemo123` | 50 |
+| Nombre       | Correo             | Contraseña     | Puntos iniciales |
+| ------------ | ------------------ | -------------- | ---------------- |
+| Ana Pérez    | `ana@tienda.co`    | `ClaveDemo123` | 100              |
+| Carlos Gómez | `carlos@tienda.co` | `ClaveDemo123` | 50               |
 
 ### Ejecución de pruebas y verificación de tipos
 
@@ -136,9 +143,9 @@ npm run test
 - **Checkout transaccional atómico**: Valida disponibilidad de stock, fija precios históricos en `order_items`, descuenta inventario, marca el carrito como comprado y registra los puntos en una única transacción de base de datos.
 - **Ledger de puntos inmutable**: Cada ganancia de puntos se asienta como un registro en `points_ledger` con restricción única `(user_id, action, reference_id)`, garantizando que el saldo de `users.points_balance` siempre sea el reflejo exacto de la suma de movimientos.
 - **Búsqueda sin tildes ni mayúsculas**: Implementación de función personalizada `normalize_text()` registrada en SQLite y compartida con el frontend (NFD + remoción de diacríticos).
-- **Frontend modular por Features con Slots**: `ProductCard` y `ProductGrid` reciben acciones mediante *slots* (`cartSlot`, `favoriteSlot`) evitando dependencias circulares entre `catalog`, `cart` y `favorites`.
+- **Frontend modular por Features con Slots**: `ProductCard` y `ProductGrid` reciben acciones mediante _slots_ (`cartSlot`, `favoriteSlot`) evitando dependencias circulares entre `catalog`, `cart` y `favorites`.
 - **TanStack Query y Filtros en la URL**: Los filtros de catálogo (`category`, `search`, `page`) residen en la URL (`useSearchParams`), permitiendo historial de navegación, recarga y enlaces compartibles sin pérdida de estado.
-- **Actualizaciones optimistas**: Tanto el carrito como los favoritos actualizan su estado visual inmediatamente y aplican *rollback* silencioso con notificación Toast si el servidor rechaza la operación.
+- **Actualizaciones optimistas**: Tanto el carrito como los favoritos actualizan su estado visual inmediatamente y aplican _rollback_ silencioso con notificación Toast si el servidor rechaza la operación.
 - **Semilla desacoplada de la red**: Los datos iniciales fueron obtenidos de DummyJSON, convertidos a pesos colombianos (COP), traducidos al español y empaquetados localmente en JSON.
 
 ---
@@ -147,21 +154,21 @@ npm run test
 
 Documentación completa en [`specs/02-api-contract.md`](specs/02-api-contract.md).
 
-| Método | Endpoint | Protegido | Descripción |
-|---|---|:---:|---|
-| `GET` | `/api/health` | No | Estado del servicio y timestamp |
-| `POST` | `/api/auth/login` | No | Autenticación por correo y contraseña; retorna JWT y usuario |
-| `GET` | `/api/auth/me` | Sí | Obtiene datos y saldo actualizado del usuario autenticado |
-| `GET` | `/api/categories` | Sí | Listado de categorías disponibles |
-| `GET` | `/api/products` | Sí | Catálogo paginado con filtros (`category`, `search`, `page`, `pageSize`) |
-| `GET` | `/api/cart` | Sí | Obtiene el carrito activo con ítems, subtotales y total |
-| `POST` | `/api/cart/items` | Sí | Agrega un producto al carrito o incrementa su cantidad |
-| `PATCH` | `/api/cart/items/:productId` | Sí | Actualiza la cantidad exacta de un ítem |
-| `DELETE` | `/api/cart/items/:productId` | Sí | Elimina un ítem del carrito |
-| `POST` | `/api/cart/checkout` | Sí | Ejecuta la compra atómica y retorna orden y puntos ganados |
-| `GET` | `/api/favorites` | Sí | Lista de productos favoritos del usuario |
-| `PUT` | `/api/favorites/:productId` | Sí | Marca favorito y otorga puntos (idempotente) |
-| `DELETE` | `/api/favorites/:productId` | Sí | Desmarca el producto de favoritos (no altera puntos) |
+| Método   | Endpoint                     | Protegido | Descripción                                                              |
+| -------- | ---------------------------- | :-------: | ------------------------------------------------------------------------ |
+| `GET`    | `/api/health`                |    No     | Estado del servicio y timestamp                                          |
+| `POST`   | `/api/auth/login`            |    No     | Autenticación por correo y contraseña; retorna JWT y usuario             |
+| `GET`    | `/api/auth/me`               |    Sí     | Obtiene datos y saldo actualizado del usuario autenticado                |
+| `GET`    | `/api/categories`            |    Sí     | Listado de categorías disponibles                                        |
+| `GET`    | `/api/products`              |    Sí     | Catálogo paginado con filtros (`category`, `search`, `page`, `pageSize`) |
+| `GET`    | `/api/cart`                  |    Sí     | Obtiene el carrito activo con ítems, subtotales y total                  |
+| `POST`   | `/api/cart/items`            |    Sí     | Agrega un producto al carrito o incrementa su cantidad                   |
+| `PATCH`  | `/api/cart/items/:productId` |    Sí     | Actualiza la cantidad exacta de un ítem                                  |
+| `DELETE` | `/api/cart/items/:productId` |    Sí     | Elimina un ítem del carrito                                              |
+| `POST`   | `/api/cart/checkout`         |    Sí     | Ejecuta la compra atómica y retorna orden y puntos ganados               |
+| `GET`    | `/api/favorites`             |    Sí     | Lista de productos favoritos del usuario                                 |
+| `PUT`    | `/api/favorites/:productId`  |    Sí     | Marca favorito y otorga puntos (idempotente)                             |
+| `DELETE` | `/api/favorites/:productId`  |    Sí     | Desmarca el producto de favoritos (no altera puntos)                     |
 
 ---
 
@@ -169,16 +176,17 @@ Documentación completa en [`specs/02-api-contract.md`](specs/02-api-contract.md
 
 Detalle de especificación en [`specs/03-rewards.md`](specs/03-rewards.md).
 
-| Acción | Puntos otorgados | Regla y Condición |
-|---|:---:|---|
-| **Marcar Favorito** | **2 pts** | Se otorga **una sola vez por producto**. Alternar el favorito múltiples veces no suma puntos adicionales. |
-| **Completar Compra** | `floor(total / 1000) + (5 × N)` | `1 pt` por cada \$1.000 COP del total pagado + `5 pts` de bonificación por cada producto distinto (*N*) en la orden. |
-| **Agregar al Carrito** | **0 pts** | No otorga puntos (decisión anti-abuso). |
+| Acción                 |        Puntos otorgados         | Regla y Condición                                                                                                    |
+| ---------------------- | :-----------------------------: | -------------------------------------------------------------------------------------------------------------------- |
+| **Marcar Favorito**    |            **2 pts**            | Se otorga **una sola vez por producto**. Alternar el favorito múltiples veces no suma puntos adicionales.            |
+| **Completar Compra**   | `floor(total / 1000) + (5 × N)` | `1 pt` por cada \$1.000 COP del total pagado + `5 pts` de bonificación por cada producto distinto (_N_) en la orden. |
+| **Agregar al Carrito** |            **0 pts**            | No otorga puntos (decisión anti-abuso).                                                                              |
 
 ### Alternativas descartadas y justificación
-- *Puntos por agregar al carrito:* Descartado por ser altamente vulnerable a manipulación (usuarios llenando carritos para inflar saldo y abandonándolos).
-- *Restar puntos al desmarcar favorito:* Descartado para mantener el historial del ledger como registros positivos inmutables y evitar saldos negativos imprevistos.
-- *Tope diario de puntos:* Pospuesto para la segunda iteración.
+
+- _Puntos por agregar al carrito:_ Descartado por ser altamente vulnerable a manipulación (usuarios llenando carritos para inflar saldo y abandonándolos).
+- _Restar puntos al desmarcar favorito:_ Descartado para mantener el historial del ledger como registros positivos inmutables y evitar saldos negativos imprevistos.
+- _Tope diario de puntos:_ Pospuesto para la segunda iteración.
 
 ---
 
@@ -197,6 +205,7 @@ Detalle de especificación en [`specs/03-rewards.md`](specs/03-rewards.md).
 ## 10. Recortes y Plan para Segunda Iteración
 
 ### Funcionalidades recortadas en esta entrega:
+
 1. Registro de usuarios, recuperación de contraseña y actualización de perfil.
 2. Refresh tokens y almacenamiento en cookies `httpOnly` con rotación.
 3. Canje de puntos acumulados como cupón de descuento en el checkout.
@@ -207,6 +216,7 @@ Detalle de especificación en [`specs/03-rewards.md`](specs/03-rewards.md).
 8. Pruebas End-to-End con Playwright/Cypress.
 
 ### Orden de prioridad para una segunda fase:
+
 1. **Seguridad reforzada:** Autenticación vía cookies seguras `httpOnly` con refresh token y rate limiting en login.
 2. **Canje de recompensas:** Permitir redimir puntos por descuentos directos en el checkout.
 3. **Historial de compras:** Vista de órdenes previas con detalle de ítems y puntos obtenidos.
@@ -255,6 +265,7 @@ El análisis y la propuesta de refactorización del código legado correspondien
 ## 14. Proceso de desarrollo
 
 El proyecto se construyó bajo una metodología **Spec-Driven Development (SDD)**:
+
 1. Cada requerimiento, modelo de datos, contrato de API y regla de negocio se especificó previamente en la carpeta `specs/`.
 2. `AGENTS.md` fijó las convenciones del código (idioma de UI en español, identificadores en inglés, arquitectura por capas y verificación estricta de compilación/tests).
 3. Cada funcionalidad fue implementada y validada contra su especificación antes de avanzar a la siguiente.
