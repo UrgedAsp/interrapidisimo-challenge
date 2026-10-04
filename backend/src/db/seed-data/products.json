@@ -1,0 +1,312 @@
+{
+  "_meta": {
+    "source": "https://dummyjson.com/products",
+    "fetchedAt": "2026-10-04",
+    "usdToCopRate": 4000,
+    "note": "Precios convertidos a COP y redondeados a miles. El seed no hace llamadas de red."
+  },
+  "categories": [
+    {
+      "name": "Hogar",
+      "slug": "hogar"
+    },
+    {
+      "name": "Tecnología",
+      "slug": "tecnologia"
+    },
+    {
+      "name": "Moda",
+      "slug": "moda"
+    },
+    {
+      "name": "Accesorios",
+      "slug": "accesorios"
+    },
+    {
+      "name": "Belleza",
+      "slug": "belleza"
+    }
+  ],
+  "products": [
+    {
+      "name": "Espátula de bambú",
+      "price": 32000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/thumbnail.webp",
+      "stock": 37
+    },
+    {
+      "name": "Vaso de aluminio negro",
+      "price": 24000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/thumbnail.webp",
+      "stock": 75
+    },
+    {
+      "name": "Licuadora con vaso",
+      "price": 160000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/boxed-blender/thumbnail.webp",
+      "stock": 9
+    },
+    {
+      "name": "Wok de acero al carbono",
+      "price": 120000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/carbon-steel-wok/thumbnail.webp",
+      "stock": 40
+    },
+    {
+      "name": "Tabla de cortar",
+      "price": 52000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/chopping-board/thumbnail.webp",
+      "stock": 14
+    },
+    {
+      "name": "Exprimidor de cítricos",
+      "price": 36000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/citrus-squeezer-yellow/thumbnail.webp",
+      "stock": 22
+    },
+    {
+      "name": "Cama de madera con cabecero",
+      "price": 7600000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/thumbnail.webp",
+      "stock": 88
+    },
+    {
+      "name": "Mesa de noche",
+      "price": 1200000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/thumbnail.webp",
+      "stock": 64
+    },
+    {
+      "name": "Lámpara de mesa",
+      "price": 200000,
+      "category": "hogar",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/home-decoration/table-lamp/thumbnail.webp",
+      "stock": 9
+    },
+    {
+      "name": "Smartphone premium",
+      "price": 4400000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/thumbnail.webp",
+      "stock": 56
+    },
+    {
+      "name": "Smartphone de gama media",
+      "price": 1000000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/smartphones/oppo-a57/thumbnail.webp",
+      "stock": 19
+    },
+    {
+      "name": "Smartphone básico",
+      "price": 600000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/smartphones/realme-c35/thumbnail.webp",
+      "stock": 48
+    },
+    {
+      "name": "Smartphone de edición limitada",
+      "price": 2000000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s8/thumbnail.webp",
+      "stock": 0
+    },
+    {
+      "name": "Portátil profesional",
+      "price": 6000000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/laptops/new-dell-xps-13-9300-laptop/thumbnail.webp",
+      "stock": 74
+    },
+    {
+      "name": "Portátil ultraligero",
+      "price": 5600000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/thumbnail.webp",
+      "stock": 75
+    },
+    {
+      "name": "Tableta compacta",
+      "price": 2000000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/thumbnail.webp",
+      "stock": 47
+    },
+    {
+      "name": "Audífonos inalámbricos",
+      "price": 520000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/thumbnail.webp",
+      "stock": 67
+    },
+    {
+      "name": "Bocina inteligente",
+      "price": 400000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/amazon-echo-plus/thumbnail.webp",
+      "stock": 61
+    },
+    {
+      "name": "Cable de carga rápida",
+      "price": 80000,
+      "category": "tecnologia",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-iphone-charger/thumbnail.webp",
+      "stock": 31
+    },
+    {
+      "name": "Camisa a cuadros",
+      "price": 120000,
+      "category": "moda",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/thumbnail.webp",
+      "stock": 38
+    },
+    {
+      "name": "Camisa de manga corta",
+      "price": 80000,
+      "category": "moda",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/mens-shirts/man-short-sleeve-shirt/thumbnail.webp",
+      "stock": 2
+    },
+    {
+      "name": "Camisa a rayas",
+      "price": 140000,
+      "category": "moda",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/thumbnail.webp",
+      "stock": 82
+    },
+    {
+      "name": "Vestido de verano",
+      "price": 80000,
+      "category": "moda",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/tops/girl-summer-dress/thumbnail.webp",
+      "stock": 43
+    },
+    {
+      "name": "Vestido tartán",
+      "price": 160000,
+      "category": "moda",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/tops/tartan-dress/thumbnail.webp",
+      "stock": 73
+    },
+    {
+      "name": "Bolso de cuero",
+      "price": 520000,
+      "category": "moda",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/womens-bags/heshe-women's-leather-bag/thumbnail.webp",
+      "stock": 99
+    },
+    {
+      "name": "Mochila sintética",
+      "price": 160000,
+      "category": "moda",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/womens-bags/white-faux-leather-backpack/thumbnail.webp",
+      "stock": 39
+    },
+    {
+      "name": "Zapatos de tacón",
+      "price": 320000,
+      "category": "moda",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/womens-shoes/calvin-klein-heel-shoes/thumbnail.webp",
+      "stock": 93
+    },
+    {
+      "name": "Gafas de sol clásicas",
+      "price": 100000,
+      "category": "accesorios",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/sunglasses/classic-sun-glasses/thumbnail.webp",
+      "stock": 1
+    },
+    {
+      "name": "Gafas de sol negras",
+      "price": 120000,
+      "category": "accesorios",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/sunglasses/black-sun-glasses/thumbnail.webp",
+      "stock": 60
+    },
+    {
+      "name": "Gafas de sol verdes",
+      "price": 140000,
+      "category": "accesorios",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/thumbnail.webp",
+      "stock": 24
+    },
+    {
+      "name": "Tenis deportivos blancos",
+      "price": 480000,
+      "category": "accesorios",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-&-red/thumbnail.webp",
+      "stock": 17
+    },
+    {
+      "name": "Zapatillas de fútbol",
+      "price": 320000,
+      "category": "accesorios",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/thumbnail.webp",
+      "stock": 12
+    },
+    {
+      "name": "Balón de fútbol",
+      "price": 72000,
+      "category": "accesorios",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/football/thumbnail.webp",
+      "stock": 96
+    },
+    {
+      "name": "Guante de béisbol",
+      "price": 100000,
+      "category": "accesorios",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-glove/thumbnail.webp",
+      "stock": 22
+    },
+    {
+      "name": "Máscara de pestañas",
+      "price": 40000,
+      "category": "belleza",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+      "stock": 99
+    },
+    {
+      "name": "Paleta de sombras",
+      "price": 80000,
+      "category": "belleza",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
+      "stock": 34
+    },
+    {
+      "name": "Labial rojo",
+      "price": 52000,
+      "category": "belleza",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp",
+      "stock": 91
+    },
+    {
+      "name": "Esmalte de uñas rojo",
+      "price": 36000,
+      "category": "belleza",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp",
+      "stock": 79
+    },
+    {
+      "name": "Perfume Noir",
+      "price": 520000,
+      "category": "belleza",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp",
+      "stock": 58
+    },
+    {
+      "name": "Crema corporal",
+      "price": 40000,
+      "category": "belleza",
+      "imageUrl": "https://cdn.dummyjson.com/product-images/skin-care/vaseline-men-body-and-face-lotion/thumbnail.webp",
+      "stock": 95
+    }
+  ]
+}

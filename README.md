@@ -34,6 +34,7 @@ Es un monorepo con npm workspaces. Un solo `install` en la raíz instala backend
 ```bash
 npm install
 cp backend/.env.example backend/.env
+npm run seed
 npm run dev
 ```
 
@@ -55,12 +56,34 @@ hay CORS en desarrollo.
 | `npm run build` | Compila backend y frontend |
 | `npm run typecheck` | Chequeo de tipos sin emitir archivos |
 | `npm run test` | Pruebas de backend y frontend |
+| `npm run seed` | Crea `./backend/data/app.db` y la llena con el seed |
+
+## Base de datos
+
+SQLite con `better-sqlite3` y SQL directo, sin ORM. El esquema está en
+`backend/src/db/schema.sql` y se aplica al abrir la base; no hay migraciones
+(recorte documentado en `01-data-model.md` §8).
+
+```bash
+npm run seed   # idempotente: se puede repetir sin duplicar datos
+```
+
+Deja 5 categorías, 40 productos y estos 2 usuarios:
+
+| Correo | Contraseña |
+|---|---|
+| `ana@tienda.co` | `ClaveDemo123` |
+| `carlos@tienda.co` | `ClaveDemo123` |
+
+Los datos del seed vienen de [DummyJSON](https://dummyjson.com), descargados una
+vez, traducidos al español y con precios convertidos a COP. El seed no hace
+llamadas de red. Para recargar todo desde cero: `rm -rf backend/data && npm run seed`.
 
 ## Estructura
 
 ```
-backend/
-frontend/
+backend/src/db/     # esquema, conexión y seed
+frontend/src/
 specs/       # fuente de verdad del proyecto
 AGENTS.md    # convenciones del repo
 ```
