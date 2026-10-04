@@ -11,7 +11,7 @@
     "frontend"
   ],
   "scripts": {
-    "dev": "concurrently --names \"backend,frontend\" --prefix-colors \"yellow,magenta\" \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev": "concurrently --names \"backend,frontend\" --prefix-colors \"yellow,magenta\" \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace backend",
     "dev:frontend": "npm run dev --workspace frontend",
     "build": "npm run build --workspace backend && npm run build --workspace frontend",
