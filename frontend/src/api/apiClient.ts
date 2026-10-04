@@ -6,7 +6,8 @@ import type {
   ErrorDetail,
   PageMeta,
 } from '../types/api.js';
-import { getToken } from '../lib/token-store.js';
+import { getToken } from '../lib/tokenStorage.js';
+
 
 export class ApiError extends Error {
   readonly status: number;

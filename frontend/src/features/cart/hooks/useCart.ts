@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../../../components/ui/Toast.js';
+import { useApplyPoints } from '../../../hooks/useApplyPoints.js';
 import { getErrorMessage } from '../../../lib/errors.js';
-import { formatPoints } from '../../../lib/format.js';
-import type { Cart, CheckoutResult, User } from '../../../types/api.js';
+import type { Cart, CheckoutResult } from '../../../types/api.js';
 import { useAuth } from '../../auth/hooks/useAuth.js';
 import {
   addCartItemApi,
@@ -16,6 +16,7 @@ export function useCart() {
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { success, error: toastError } = useToast();
+  const { applyPoints } = useApplyPoints();
 
   const cartQuery = useQuery<Cart>({
     queryKey: ['cart'],
@@ -60,22 +61,20 @@ export function useCart() {
   const checkoutMutation = useMutation({
     mutationFn: checkoutApi,
     onSuccess: (result: CheckoutResult) => {
-      // 1. Actualizar caché de usuario con el nuevo saldo de puntos
-      queryClient.setQueryData<User>(['me'], (old) => {
-        if (!old) return old;
-        return { ...old, pointsBalance: result.pointsBalance };
+      // 1. Sincronizar puntos con 'me' y notificar
+      applyPoints({
+        pointsAwarded: result.pointsAwarded,
+        pointsBalance: result.pointsBalance,
+        message: '¡Compra exitosa!',
       });
+
+      if (result.pointsAwarded === 0) {
+        success('¡Compra realizada con éxito!');
+      }
 
       // 2. Invalidar carrito y productos (por stock)
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       queryClient.invalidateQueries({ queryKey: ['products'] });
-
-      // 3. Notificación con puntos ganados
-      if (result.pointsAwarded > 0) {
-        success(`¡Compra exitosa! Has ganado +${formatPoints(result.pointsAwarded)} puntos.`);
-      } else {
-        success('¡Compra realizada con éxito!');
-      }
     },
     onError: (err) => {
       toastError(getErrorMessage(err));

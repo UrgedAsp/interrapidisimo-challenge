@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { setUnauthorizedHandler } from '../../../api/apiClient.js';
-import { getToken, removeToken, setToken } from '../../../lib/token-store.js';
+import { getToken, removeToken, setToken } from '../../../lib/tokenStorage.js';
+
 import type { User } from '../../../types/api.js';
 import { getMeApi, loginApi } from '../api/authApi.js';
 

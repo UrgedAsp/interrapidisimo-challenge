@@ -43,10 +43,12 @@ frontend/src/
 │   ├── cart/
 │   └── favorites/
 ├── hooks/
-│   └── useDebounce.ts
+│   ├── useDebounce.ts
+│   └── useApplyPoints.ts      # aplica pointsAwarded/pointsBalance a ['me'] y avisa
 ├── lib/
 │   ├── format.ts              # formatCOP, formatPoints
-│   └── errors.ts              # getErrorMessage
+│   ├── errors.ts              # getErrorMessage
+│   └── tokenStorage.ts        # token en localStorage, con try/catch
 ├── types/
 │   └── api.ts                 # contrato: ApiSuccess, ApiList, ApiErrorBody, Product, Cart...
 ├── styles/

@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../../../components/ui/Toast.js';
+import { useApplyPoints } from '../../../hooks/useApplyPoints.js';
 import { getErrorMessage } from '../../../lib/errors.js';
-import { formatPoints } from '../../../lib/format.js';
-import type { FavoriteResult, Product, User } from '../../../types/api.js';
+import type { FavoriteResult, Product } from '../../../types/api.js';
 import { useAuth } from '../../auth/hooks/useAuth.js';
 import {
   addFavoriteApi,
@@ -14,6 +14,7 @@ export function useFavorites() {
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { success, error: toastError } = useToast();
+  const { applyPoints } = useApplyPoints();
 
   const favoritesQuery = useQuery<Product[]>({
     queryKey: ['favorites'],
@@ -24,21 +25,18 @@ export function useFavorites() {
   const addFavoriteMutation = useMutation({
     mutationFn: (productId: number) => addFavoriteApi(productId),
     onSuccess: (result: FavoriteResult) => {
-      // 1. Actualizar puntos de usuario en caché si hubo premio
-      queryClient.setQueryData<User>(['me'], (old) => {
-        if (!old) return old;
-        return { ...old, pointsBalance: result.pointsBalance };
+      applyPoints({
+        pointsAwarded: result.pointsAwarded,
+        pointsBalance: result.pointsBalance,
+        message: '¡Agregado a favoritos!',
       });
 
-      // 2. Invalidar favoritos y productos para sincronizar isFavorite
-      queryClient.invalidateQueries({ queryKey: ['favorites'] });
-      queryClient.invalidateQueries({ queryKey: ['products'] });
-
-      if (result.pointsAwarded > 0) {
-        success(`¡Has ganado +${formatPoints(result.pointsAwarded)} puntos por agregar a favoritos!`);
-      } else {
+      if (result.pointsAwarded === 0) {
         success('Producto agregado a favoritos');
       }
+
+      queryClient.invalidateQueries({ queryKey: ['favorites'] });
+      queryClient.invalidateQueries({ queryKey: ['products'] });
     },
     onError: (err) => {
       toastError(getErrorMessage(err));
@@ -48,9 +46,9 @@ export function useFavorites() {
   const removeFavoriteMutation = useMutation({
     mutationFn: (productId: number) => removeFavoriteApi(productId),
     onSuccess: (result: FavoriteResult) => {
-      queryClient.setQueryData<User>(['me'], (old) => {
-        if (!old) return old;
-        return { ...old, pointsBalance: result.pointsBalance };
+      applyPoints({
+        pointsAwarded: 0,
+        pointsBalance: result.pointsBalance,
       });
 
       queryClient.invalidateQueries({ queryKey: ['favorites'] });
