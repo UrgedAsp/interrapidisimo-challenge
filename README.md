@@ -43,10 +43,10 @@ falla si falta `JWT_SECRET`.
 
 - Frontend: http://localhost:5173
 - Backend: http://localhost:3001
-- Health check del backend: http://localhost:3001/health
+- Health check del backend: http://localhost:3001/api/health
 
 El servidor de desarrollo de Vite hace proxy de `/api` hacia el backend, así que no
-hay CORS en desarrollo.
+hay CORS en desarrollo. El cliente siempre pega a rutas relativas (`/api/...`).
 
 ## Comandos
 
@@ -79,13 +79,43 @@ Los datos del seed vienen de [DummyJSON](https://dummyjson.com), descargados una
 vez, traducidos al español y con precios convertidos a COP. El seed no hace
 llamadas de red. Para recargar todo desde cero: `rm -rf backend/data && npm run seed`.
 
+## Contrato del API
+
+Detalle en [`specs/02-api-contract.md`](specs/02-api-contract.md). Toda respuesta es
+exactamente una de estas tres formas:
+
+```json
+{ "data": { } }
+{ "data": [ ], "meta": { "page": 1, "pageSize": 12, "total": 87, "totalPages": 8 } }
+{ "error": { "code": "VALIDATION_ERROR", "message": "Datos inválidos", "details": [ ] } }
+```
+
+- Los `code` son estables y son lo que el cliente usa para decidir qué mostrar. Los
+  mensajes van en español.
+- `authenticate` se monta una sola vez en `/api`, después de las rutas públicas: a
+  partir de ahí todo lo registrado exige `Authorization: Bearer <jwt>`.
+- Un 500 nunca expone trazas. El error real solo se escribe en el log del servidor.
+- `AppError(status, code, message, details?)` es lo que lanzan los services; el
+  middleware de errores es el único que decide la forma de un error.
+
+Variables de entorno relevantes:
+
+| Variable | Defecto | Para qué |
+|---|---|---|
+| `JWT_SECRET` | — (obligatoria) | Firma y verificación del token |
+| `JWT_EXPIRES_IN` | `1h` | Vigencia del token |
+| `DATABASE_PATH` | `./data/app.db` | Ruta del archivo SQLite |
+| `FRONTEND_ORIGIN` | `http://localhost:5173` | Único origen con CORS |
+
 ## Estructura
 
 ```
-backend/src/db/     # esquema, conexión y seed
-frontend/src/
-specs/       # fuente de verdad del proyecto
-AGENTS.md    # convenciones del repo
+backend/src/db/       # esquema, conexión y seed
+backend/src/shared/   # contrato: tipos, AppError, validación, middlewares
+frontend/src/lib/     # apiClient y token store
+frontend/src/types/   # espejo del contrato
+specs/                # fuente de verdad del proyecto
+AGENTS.md             # convenciones del repo
 ```
 
 ## Especificaciones

@@ -15,10 +15,9 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // El prefijo /api se reenvia tal cual al backend; el contrato definitivo
-      // de endpoints llega en 02-api-contract.md.
+      // El prefijo /api se reenvia tal cual al backend: el cliente siempre
+      // pega a rutas relativas, así en dev no hay CORS ni URLs duplicadas.
       '/api': { target: API_ORIGIN, changeOrigin: true },
-      '/health': { target: API_ORIGIN, changeOrigin: true },
     },
   },
   test: {
