@@ -19,11 +19,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(({ product }) 
         <div className="relative mb-3">
           <ProductImage src={product.imageUrl} alt={product.name} />
           <div className="absolute top-2 right-2">
-            <FavoriteButton
-              productId={product.id}
-              productName={product.name}
-              isFavorite={product.isFavorite}
-            />
+            <FavoriteButton product={product} />
           </div>
         </div>
 
