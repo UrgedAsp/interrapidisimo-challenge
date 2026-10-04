@@ -59,6 +59,10 @@ export const outOfStock = (productId: number, message: string = 'Sin stock sufic
     { productId, message },
   ]);
 
+export const outOfStockMultiple = (details: ErrorDetail[], message: string = 'Sin stock suficiente') =>
+  new AppError(409, 'OUT_OF_STOCK', message, details);
+
 export const cartEmpty = () =>
   new AppError(409, 'CART_EMPTY', 'El carrito está vacío');
+
 

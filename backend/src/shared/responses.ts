@@ -11,6 +11,10 @@ export function ok<T>(res: Response, data: T): void {
   res.json({ data } satisfies ApiSuccess<T>);
 }
 
+export function created<T>(res: Response, data: T): void {
+  res.status(201).json({ data } satisfies ApiSuccess<T>);
+}
+
 export function okList<T>(res: Response, data: T[], meta: PageMeta): void {
   res.json({ data, meta } satisfies ApiList<T>);
 }

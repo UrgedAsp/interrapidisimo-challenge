@@ -1,11 +1,12 @@
 import type { Request, Response } from 'express';
 import { requireUser } from '../../middlewares/auth.js';
-import { ok } from '../../shared/responses.js';
+import { created, ok } from '../../shared/responses.js';
 import { parseBody, parseParams } from '../../shared/validate.js';
 import { addCartItemBody, productIdParam, updateCartItemBody } from './cart.schema.js';
 import type { CartService } from './cart.service.js';
+import type { CheckoutService } from './checkout.service.js';
 
-export function createCartController(service: CartService) {
+export function createCartController(service: CartService, checkoutService: CheckoutService) {
   return {
     getCart(req: Request, res: Response): void {
       const { id: userId } = requireUser(req);
@@ -34,5 +35,12 @@ export function createCartController(service: CartService) {
       const cart = service.removeItem(userId, productId);
       ok(res, cart);
     },
+
+    checkout(req: Request, res: Response): void {
+      const { id: userId } = requireUser(req);
+      const result = checkoutService.checkout(userId);
+      created(res, result);
+    },
   };
 }
+

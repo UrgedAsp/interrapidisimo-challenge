@@ -10,6 +10,9 @@ import {
 import { createAuthService } from './modules/auth/auth.service.js';
 import { createProductsRoutes } from './modules/products/products.routes.js';
 import { createCartRoutes } from './modules/cart/cart.routes.js';
+import { createFavoritesRoutes } from './modules/favorites/favorites.routes.js';
+import { createRewardsRepository } from './modules/rewards/rewards.repository.js';
+import { createRewardsService } from './modules/rewards/rewards.service.js';
 import { authenticate } from './middlewares/auth.js';
 import { errorHandler, notFound } from './shared/error-middleware.js';
 import { ok } from './shared/responses.js';
@@ -42,6 +45,8 @@ export function createApp(db: DatabaseConnection) {
 
   const api = express.Router();
   const authService = createAuthService(db);
+  const rewardsRepository = createRewardsRepository(db);
+  const rewardsService = createRewardsService(rewardsRepository);
 
   api.get('/health', (_req, res) => {
     ok(res, { status: 'ok' });
@@ -54,11 +59,12 @@ export function createApp(db: DatabaseConnection) {
 
   api.use(createProtectedAuthRoutes(authService));
 
-  // Catálogo. Va después de `authenticate` porque `GET /api/products` devuelve
-  // `isFavorite` del usuario: sin token no hay usuario y el campo no tendría sentido.
+  // Catálogo, carrito y favoritos. Van después de `authenticate`.
   api.use(createProductsRoutes(db));
   api.use(createCategoriesRoutes(db));
-  api.use(createCartRoutes(db));
+  api.use(createCartRoutes(db, rewardsService));
+  api.use(createFavoritesRoutes(db, rewardsService));
+
 
   app.use('/api', api);
 
