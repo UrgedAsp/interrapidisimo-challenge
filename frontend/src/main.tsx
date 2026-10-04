@@ -1,6 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { LucideProvider } from 'lucide-react';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
@@ -8,18 +9,27 @@ import './index.css';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,
       retry: 1,
+      staleTime: 30_000,
+      refetchOnWindowFocus: false,
     },
   },
 });
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+const container = document.getElementById('root');
+
+if (!container) {
+  throw new Error('No se encontró el nodo #root en index.html');
+}
+
+createRoot(container).render(
+  <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <LucideProvider size={20} strokeWidth={1.5}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </LucideProvider>
     </QueryClientProvider>
-  </React.StrictMode>
+  </StrictMode>,
 );

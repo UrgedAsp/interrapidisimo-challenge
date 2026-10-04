@@ -1,8 +1,22 @@
 node_modules/
 dist/
+coverage/
+
+# SQLite
 *.db
 *.db-shm
 *.db-wal
+
+# Env
 .env
 .env.local
-coverage/
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editores / SO
+.DS_Store
+.idea/
+.vscode/

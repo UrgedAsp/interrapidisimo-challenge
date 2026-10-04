@@ -1,38 +1,44 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@layer base {
-  :root {
-    --color-primary: #1C1917;
-    --color-secondary: #B4654A;
-    --color-tertiary: #C8A97E;
-    --color-neutral: #F9F6F0;
-    --color-success: #3F6B4F;
-    --color-error: #B42318;
-  }
+/*
+ * Tokens de diseño — specs/00-overview.md §8.
+ * Este es el ÚNICO archivo del repo donde se permiten valores hex.
+ * Los componentes solo usan utilidades derivadas de estos tokens.
+ */
+@theme {
+  --color-primary: #1c1917;
+  --color-secondary: #b4654a;
+  --color-tertiary: #c8a97e;
+  --color-neutral: #f9f6f0;
+  --color-success: #3f6b4f;
+  --color-error: #b42318;
 
-  html {
-    font-family: "Plus Jakarta Sans", sans-serif;
-    background-color: #F9F6F0;
-    color: #1C1917;
-  }
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-headline: 'Playfair Display', ui-serif, Georgia, serif;
 
-  h1, h2, h3 {
-    font-family: "Playfair Display", serif;
-  }
-
-  * {
-    border-radius: 6px;
-  }
+  --radius-field: 6px;
+  --radius-card: 6px;
 }
 
-@layer utilities {
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+@layer base {
+  html {
+    font-family: var(--font-sans);
   }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+
+  body {
+    background-color: var(--color-neutral);
+    color: var(--color-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-headline);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
   }
 }
