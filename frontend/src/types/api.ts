@@ -16,7 +16,10 @@ export type ErrorCode =
   | 'OUT_OF_STOCK'
   | 'CART_EMPTY'
   | 'VALIDATION_ERROR'
-  | 'INTERNAL_ERROR';
+  | 'INTERNAL_ERROR'
+  | 'NETWORK_ERROR'
+  | 'UNKNOWN_ERROR';
+
 
 export type ApiSuccess<T> = { data: T };
 

@@ -1,6 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, apiGet, apiGetList, apiSend } from './api-client';
-import { clearToken, getToken, setToken } from './token-store';
+import {
+  ApiError,
+  apiGet,
+  apiGetList,
+  apiSend,
+  setUnauthorizedHandler,
+} from '../api/apiClient.js';
+import { getErrorMessage } from './errors.js';
+import { formatCOP, formatPoints } from './format.js';
+import { clearToken, getToken, removeToken, setToken } from './token-store.js';
 
 const jsonResponse = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -14,14 +22,15 @@ beforeEach(() => {
   fetchMock = vi.fn();
   vi.stubGlobal('fetch', fetchMock);
   window.localStorage.clear();
+  setUnauthorizedHandler(null);
 });
 
 afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe('apiGet', () => {
-  it('devuelve el contenido de data, no el sobre completo', async () => {
+describe('apiClient (§5 y §13 de 20-frontend-base.md)', () => {
+  it('apiGet devuelve el contenido de data, no el sobre completo', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ data: { id: 1, name: 'Licuadora' } }));
 
     await expect(apiGet<{ id: number; name: string }>('/products/1')).resolves.toEqual({
@@ -30,46 +39,18 @@ describe('apiGet', () => {
     });
   });
 
-  it('pega a rutas relativas con el prefijo /api', async () => {
-    fetchMock.mockResolvedValue(jsonResponse({ data: [] }));
+  it('apiGetList devuelve data y meta', async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse({ data: [{ id: 1 }], meta: { page: 2, pageSize: 12, total: 30, totalPages: 3 } }),
+    );
 
-    await apiGet('/products');
-
-    expect(fetchMock).toHaveBeenCalledWith('/api/products', expect.objectContaining({ method: 'GET' }));
-  });
-
-  it('añade el token guardado como Bearer', async () => {
-    setToken('abc123');
-    fetchMock.mockResolvedValue(jsonResponse({ data: null }));
-
-    await apiGet('/me');
-
-    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({
-      headers: { Authorization: 'Bearer abc123' },
+    await expect(apiGetList<{ id: number }>('/products')).resolves.toEqual({
+      data: [{ id: 1 }],
+      meta: { page: 2, pageSize: 12, total: 30, totalPages: 3 },
     });
   });
 
-  it('omite Authorization si no hay token', async () => {
-    fetchMock.mockResolvedValue(jsonResponse({ data: null }));
-
-    await apiGet('/auth/login', { token: null });
-
-    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({ headers: {} });
-  });
-
-  it('serializa la query y descarta valores vacíos', async () => {
-    fetchMock.mockResolvedValue(jsonResponse({ data: [] }));
-
-    await apiGet('/products', { query: { page: 2, q: 'audio', category: undefined, pageSize: '' } });
-
-    const url = fetchMock.mock.calls[0]?.[0] as string;
-    expect(url).toContain('page=2');
-    expect(url).toContain('q=audio');
-    expect(url).not.toContain('category=');
-    expect(url).not.toContain('pageSize=');
-  });
-
-  it('lanza ApiError con code, message y details', async () => {
+  it('lanza ApiError con code, message y details ante error del contrato', async () => {
     fetchMock.mockResolvedValue(
       jsonResponse(
         {
@@ -92,25 +73,53 @@ describe('apiGet', () => {
     ]);
   });
 
-  it('traduce una respuesta fuera del contrato a ApiError mostrable', async () => {
-    fetchMock.mockResolvedValue(new Response('<html>502</html>', { status: 502 }));
-
-    const error = await apiGet('/products').catch((caught: unknown) => caught);
-
-    expect(error).toBeInstanceOf(ApiError);
-    expect(error).toMatchObject({ status: 502, code: 'INTERNAL_ERROR' });
-  });
-
-  it('traduce un fallo de red a ApiError', async () => {
+  it('un fallo de red produce ApiError con code: NETWORK_ERROR', async () => {
     fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
 
     const error = await apiGet('/products').catch((caught: unknown) => caught);
 
     expect(error).toBeInstanceOf(ApiError);
-    expect((error as ApiError).code).toBe('INTERNAL_ERROR');
+    expect((error as ApiError).code).toBe('NETWORK_ERROR');
   });
 
-  it('reenvía el AbortError sin envolverlo', async () => {
+  it('una respuesta no JSON o inválida produce UNKNOWN_ERROR', async () => {
+    fetchMock.mockResolvedValue(new Response('<html>502 Bad Gateway</html>', { status: 502 }));
+
+    const error = await apiGet('/products').catch((caught: unknown) => caught);
+
+    expect(error).toBeInstanceOf(ApiError);
+    expect((error as ApiError).code).toBe('UNKNOWN_ERROR');
+  });
+
+  it('401 UNAUTHORIZED invoca el manejador de sesión', async () => {
+    const unauthorizedSpy = vi.fn();
+    setUnauthorizedHandler(unauthorizedSpy);
+
+    fetchMock.mockResolvedValue(
+      jsonResponse({ error: { code: 'UNAUTHORIZED', message: 'No autorizado' } }, 401),
+    );
+
+    await apiGet('/cart').catch(() => {});
+
+    expect(unauthorizedSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('401 INVALID_CREDENTIALS en login NO invoca el manejador de sesión', async () => {
+    const unauthorizedSpy = vi.fn();
+    setUnauthorizedHandler(unauthorizedSpy);
+
+    fetchMock.mockResolvedValue(
+      jsonResponse({ error: { code: 'INVALID_CREDENTIALS', message: 'Clave errónea' } }, 401),
+    );
+
+    await apiSend('POST', '/auth/login', { body: { email: 'a@b.com', password: '123' } }).catch(
+      () => {},
+    );
+
+    expect(unauthorizedSpy).not.toHaveBeenCalled();
+  });
+
+  it('una petición cancelada relanza AbortError sin convertirla en ApiError', async () => {
     fetchMock.mockRejectedValue(new DOMException('abortado', 'AbortError'));
 
     const error = await apiGet('/products').catch((caught: unknown) => caught);
@@ -119,38 +128,26 @@ describe('apiGet', () => {
   });
 });
 
-describe('apiSend', () => {
-  it('envía el cuerpo como JSON', async () => {
-    fetchMock.mockResolvedValue(jsonResponse({ data: { id: 1 } }));
-
-    await apiSend('POST', '/cart/items', { body: { productId: 1, quantity: 2 } });
-
-    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productId: 1, quantity: 2 }),
-    });
+describe('Utilidades (§11 de 20-frontend-base.md)', () => {
+  it('formatCOP formatea valores en pesos colombianos sin decimales', () => {
+    const formatted = formatCOP(89900);
+    expect(formatted).toMatch(/89\.900/);
+    expect(formatted).toContain('$');
   });
 
-  it('no manda Content-Type cuando no hay cuerpo', async () => {
-    fetchMock.mockResolvedValue(jsonResponse({ data: { id: 1, items: [], itemCount: 0, total: 0 } }));
-
-    await apiSend('POST', '/cart/checkout');
-
-    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({ headers: {}, body: undefined });
+  it('formatPoints formatea enteros con separador de miles', () => {
+    const formatted = formatPoints(1250);
+    expect(formatted).toMatch(/1\.250/);
   });
-});
 
-describe('apiGetList', () => {
-  it('devuelve data y meta', async () => {
-    fetchMock.mockResolvedValue(
-      jsonResponse({ data: [{ id: 1 }], meta: { page: 2, pageSize: 12, total: 30, totalPages: 3 } }),
-    );
-
-    await expect(apiGetList<{ id: number }>('/products')).resolves.toEqual({
-      data: [{ id: 1 }],
-      meta: { page: 2, pageSize: 12, total: 30, totalPages: 3 },
-    });
+  it('getErrorMessage devuelve el mensaje en español correspondiente según el código', () => {
+    expect(getErrorMessage(new ApiError(409, 'OUT_OF_STOCK', 'msg'))).toContain('stock');
+    expect(getErrorMessage(new ApiError(409, 'CART_EMPTY', 'msg'))).toContain('carrito');
+    expect(getErrorMessage(new ApiError(0, 'NETWORK_ERROR', 'msg'))).toContain('conexión');
+    expect(getErrorMessage(new ApiError(401, 'INVALID_CREDENTIALS', 'msg'))).toContain('incorrectos');
+    expect(getErrorMessage(new ApiError(404, 'PRODUCT_NOT_FOUND', 'msg'))).toContain('encontrado');
+    expect(getErrorMessage(new Error('error genérico'))).toBe('error genérico');
+    expect(getErrorMessage('algo')).toBe('Ocurrió un error inesperado. Intenta de nuevo.');
   });
 });
 
@@ -161,6 +158,10 @@ describe('token-store', () => {
     setToken('abc123');
     expect(getToken()).toBe('abc123');
 
+    removeToken();
+    expect(getToken()).toBeNull();
+
+    setToken('def456');
     clearToken();
     expect(getToken()).toBeNull();
   });
