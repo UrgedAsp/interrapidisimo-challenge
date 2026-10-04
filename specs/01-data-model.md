@@ -11,10 +11,24 @@ Definir las tablas, relaciones, restricciones e índices de SQLite, y el conteni
 - Motor: SQLite vía `better-sqlite3`, con `PRAGMA foreign_keys = ON` en cada conexión.
 - Claves primarias: `INTEGER PRIMARY KEY AUTOINCREMENT`, salvo claves compuestas indicadas.
 - Dinero: enteros en **pesos colombianos (COP)**, sin decimales.
-- Fechas: texto ISO 8601 en UTC (`created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP`).
 - Nombres de tablas y columnas en `snake_case` y en inglés.
 - El esquema vive en `backend/src/db/schema.sql` y se aplica al iniciar si las tablas no existen. No hay sistema de migraciones (recorte documentado).
 - Ruta de la base de datos configurable con `DATABASE_PATH` (por defecto `./data/app.db`). Las pruebas usan `:memory:`.
+
+### Fechas
+
+Todo `created_at` es **texto ISO 8601 en UTC**, con milisegundos y `Z`: `2026-10-04T18:01:14.104Z`. Como el orden lexicográfico de ese formato coincide con el orden cronológico, `ORDER BY created_at` no necesita conversiones.
+
+El default es `strftime('%Y-%m-%dT%H:%M:%fZ', 'now')` y **no** `CURRENT_TIMESTAMP`. No es equivalente: `CURRENT_TIMESTAMP` escribe `2026-10-04 18:01:14`, sin `T`, sin milisegundos y sin zona, y `new Date()` interpreta ese texto como **hora local**. En una máquina en UTC-5, una fila escrita a las 18:01 se leía como las 13:01. El desfase dependía de dónde se ejecutara el servidor.
+
+> Sin migraciones (§8), cambiar el default no reescribe filas ya existentes: una base creada antes del cambio queda con ambos formatos mezclados hasta que se regenere. La base de desarrollo se reconstruye borrándola y corriendo `npm run seed`, que es la vía documentada para obtener una base consistente.
+
+### Texto buscable
+
+La búsqueda por nombre (§5) no compara la columna cruda sino el texto normalizado con `normalize_text()`, una función registrada en cada conexión que pasa a minúsculas y quita tildes (NFD, quitando los diacríticos). Así `"Jamón Rástico"` coincide con una búsqueda de `jamon`.
+
+`normalize_text()` va como función registrada y no dentro del `WHERE` de cada consulta porque el orden de evaluación de los predicados en SQLite no está garantizado: escrito en línea, `normalize_text(name) LIKE ?` puede ejecutarse en el orden que quiera. Dentro de una función registrada el motor resuelve el índice antes de invocarla, así que el orden deja de importar. Se declara `deterministic` para que SQLite la permita en índices y en planes con `LIKE`/`GLOB`.
+
 
 ## 3. Diagrama
 
@@ -70,7 +84,7 @@ erDiagram
 - `idx_products_category` sobre `category_id`.
 - `idx_products_name` sobre `name COLLATE NOCASE`.
 
-> La búsqueda por nombre usa `LIKE '%q%'`, que no aprovecha el índice. Con un catálogo de ~40 productos es irrelevante; se documenta como limitación y la mejora (FTS5) queda para una segunda iteración.
+> La búsqueda por nombre usa `LIKE '%q%'` sobre `normalize_text(name)` (ver §2, "Texto buscable"), por lo que no aprovecha el índice: con un catálogo de ~40 productos es irrelevante. El índice de nombre sirve para el ordenamiento alfabético, que es lo que lo justifica. La mejora (FTS5) queda para una segunda iteración.
 
 ### carts
 
@@ -98,6 +112,8 @@ CREATE UNIQUE INDEX one_open_cart_per_user ON carts(user_id) WHERE status = 'ope
 
 Restricción: `UNIQUE (cart_id, product_id)`.
 
+Índice: `idx_cart_items_cart` sobre `cart_id`, que es el acceso de `GET /api/cart` (cargar el carrito entero).
+
 ### favorites
 
 | Columna | Tipo | Restricciones |
@@ -119,6 +135,8 @@ Clave primaria compuesta: `(user_id, product_id)`.
 | created_at | TEXT | NOT NULL |
 
 `cart_id` único: un carrito solo puede convertirse en una orden, lo que vuelve el checkout idempotente.
+
+Índice: `idx_orders_user` sobre `user_id`, que es el acceso del historial de pedidos.
 
 ### order_items
 
@@ -144,6 +162,8 @@ Clave primaria compuesta: `(order_id, product_id)`.
 
 Restricción: `UNIQUE (user_id, action, reference)`. Es el mecanismo anti-abuso: la base de datos rechaza cualquier premio repetido. Reglas de puntos en `03-rewards.md`.
 
+Índice: `idx_points_ledger_user` sobre `user_id`, que es el acceso del invariante 1 (sumar el ledger de un usuario) y de la verificación de saldo de `GET /api/me`.
+
 ## 5. Invariantes
 
 1. `users.points_balance` es igual a la suma de `points_ledger.points` del usuario. Ambos se modifican siempre en la misma transacción.
@@ -166,13 +186,16 @@ Fuente de datos: `backend/src/db/seed-data/products.json`, versionado en el repo
 
 ## 7. Criterios de aceptación
 
-- [ ] `schema.sql` crea todas las tablas, claves foráneas e índices descritos.
-- [ ] `npm run seed` deja 4 a 5 categorías, ~40 productos y 2 usuarios, y puede repetirse sin errores ni duplicados.
-- [ ] Insertar dos carritos `open` para el mismo usuario falla por restricción de la base de datos.
-- [ ] Insertar dos filas de `points_ledger` con el mismo (user, action, reference) falla por restricción.
-- [ ] No se puede guardar stock negativo, cantidades en cero ni precios no positivos.
-- [ ] Con `foreign_keys = ON`, no se puede crear un producto con una categoría inexistente.
-- [ ] Las pruebas pueden crear una base de datos en memoria con el mismo esquema.
+- [x] `schema.sql` crea todas las tablas, claves foráneas e índices descritos.
+- [x] `npm run seed` deja 4 a 5 categorías, ~40 productos y 2 usuarios, y puede repetirse sin errores ni duplicados.
+- [x] Insertar dos carritos `open` para el mismo usuario falla por restricción de la base de datos.
+- [x] Insertar dos filas de `points_ledger` con el mismo (user, action, reference) falla por restricción.
+- [x] No se puede guardar stock negativo, cantidades en cero ni precios no positivos.
+- [x] Con `foreign_keys = ON`, no se puede crear un producto con una categoría inexistente.
+- [x] Las pruebas pueden crear una base de datos en memoria con el mismo esquema.
+- [x] `created_at` sale en ISO 8601 con `Z`, y `new Date(created_at).toISOString()` devuelve el mismo texto que había guardado.
+- [x] `ORDER BY created_at` ordena igual que por instante.
+- [x] `normalize_text()` está disponible en toda conexión abierta por `openDatabase()`, y encuentra un producto escrito con tildes al buscar sin tildes.
 
 ## 8. Fuera de alcance
 

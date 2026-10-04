@@ -85,6 +85,107 @@ describe('esquema', () => {
   });
 });
 
+describe('§2 fechas en ISO 8601 UTC', () => {
+  it('created_at es ISO 8601 con zona, no el texto de CURRENT_TIMESTAMP', () => {
+    const userId = insertUser();
+
+    const row = db
+      .prepare<[number], { created_at: string }>('SELECT created_at FROM users WHERE id = ?')
+      .get(userId)!;
+
+    expect(row.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+  });
+
+  it('el texto se parsea como UTC y no como hora local', () => {
+    const userId = insertUser();
+    const row = db
+      .prepare<[number], { created_at: string }>('SELECT created_at FROM users WHERE id = ?')
+      .get(userId)!;
+
+    // El bug que motivó el cambio: CURRENT_TIMESTAMP escribe '2026-10-04 17:57:22'
+    // y new Date() lo lee como hora local, con un desfase igual al offset de la
+    // máquina. Un ISO 8601 con Z se interpreta como UTC en cualquier parte.
+    const parsed = new Date(row.created_at);
+
+    expect(parsed.toISOString()).toBe(row.created_at);
+    expect(Math.abs(Date.now() - parsed.getTime())).toBeLessThan(60_000);
+  });
+
+  it('ordenar por texto equivale a ordenar por fecha', () => {
+    const rows = db
+      .prepare<[], { created_at: string }>('SELECT created_at FROM products ORDER BY created_at')
+      .all();
+    expect(rows.length).toBe(0);
+
+    const categoryId = insertCategory();
+    const insert = db.prepare(
+      "INSERT INTO products (name, price, category_id, image_url, stock, created_at) VALUES (?, 1000, ?, 'x', 1, ?)",
+    );
+    insert.run('Primero', categoryId, '2026-01-01T00:00:00.000Z');
+    insert.run('Tercero', categoryId, '2026-12-31T23:59:59.999Z');
+    insert.run('Segundo', categoryId, '2026-06-15T12:00:00.000Z');
+
+    const names = db
+      .prepare<[], { name: string }>('SELECT name FROM products ORDER BY created_at')
+      .all()
+      .map((row) => row.name);
+
+    expect(names).toEqual(['Primero', 'Segundo', 'Tercero']);
+  });
+
+  it('permite fijar created_at de forma explícita', () => {
+    const categoryId = insertCategory();
+    db.prepare(
+      "INSERT INTO products (name, price, category_id, image_url, stock, created_at) VALUES ('Espátula', 1000, ?, 'x', 1, '2026-03-01T08:30:00.000Z')",
+    ).run(categoryId);
+
+    expect(countRows(db, 'products')).toBe(1);
+  });
+});
+
+describe('normalize_text de §4', () => {
+  it('quita tildes y baja a minúsculas', () => {
+    const row = db
+      .prepare<[string], { value: string }>("SELECT normalize_text(?) AS value")
+      .get('Jamón RÁSTICO')!;
+
+    expect(row.value).toBe('jamon rastico');
+  });
+
+  it('deja intacto el texto ya normalizado', () => {
+    const row = db
+      .prepare<[string], { value: string }>("SELECT normalize_text(?) AS value")
+      .get('cafetera')!;
+
+    expect(row.value).toBe('cafetera');
+  });
+
+  it('encuentra un producto sin importar tildes ni mayúsculas', () => {
+    const categoryId = insertCategory();
+    db.prepare(
+      "INSERT INTO products (name, price, category_id, image_url, stock) VALUES ('Jamón Rástico', 1000, ?, 'x', 1)",
+    ).run(categoryId);
+
+    const search = db
+      .prepare<[string], { name: string }>(
+        "SELECT name FROM products WHERE normalize_text(name) LIKE '%' || normalize_text(?) || '%'",
+      )
+      .all('JAMON');
+
+    expect(search.map((row) => row.name)).toEqual(['Jamón Rástico']);
+  });
+
+  it('está registrada en cada conexión, no solo en la primera', () => {
+    // Si alguien abre la base con better-sqlite3 sin pasar por openDatabase(), la
+    // función no existe y la búsqueda de §5 falla en runtime, no al compilar.
+    const segunda = createTestDatabase();
+
+    expect(segunda.prepare("SELECT normalize_text('ÁÉÍÓÚ') AS v").get()).toEqual({ v: 'aeiou' });
+
+    segunda.close();
+  });
+});
+
 describe('invariante 2: un solo carrito abierto por usuario', () => {
   it('rechaza el segundo carrito open del mismo usuario', () => {
     const userId = insertUser();
