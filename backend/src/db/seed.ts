@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 import { env } from '../config/env.js';
@@ -120,7 +120,7 @@ export function seedSummary(db: DatabaseConnection): Record<(typeof TABLES)[numb
 }
 
 function isMainModule(): boolean {
-  return process.argv[1] !== undefined && import.meta.url === `file://${process.argv[1]}`;
+  return process.argv[1] !== undefined && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 }
 
 if (isMainModule()) {

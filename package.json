@@ -20,7 +20,8 @@
     "seed": "npm run seed --workspace backend"
   },
   "devDependencies": {
-    "concurrently": "^10.0.5"
+    "concurrently": "^10.0.5",
+    "tsx": "^4.23.15"
   },
   "allowScripts": {
     "bcrypt@6.0.0": true,
